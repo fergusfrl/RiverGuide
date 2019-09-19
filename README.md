@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/fergusfrl/RiverGuide.svg?style=svg)](https://circleci.com/gh/fergusfrl/RiverGuide)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b85f1a324b029bbbb4a6/maintainability)](https://codeclimate.com/github/fergusfrl/RiverGuide/maintainability)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
