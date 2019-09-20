@@ -20,18 +20,23 @@ const ListSubRow = ({ values }: any) => {
   const classes = useStyles();
   return (
     <>
-      {values.map((item: any) => (
-        <>
+      {values.map((item: any, index: number) => (
+        <div key={`${item.name}-${index}`}>
           <ListSubheader>{item.name}</ListSubheader>
-          {item.value.map((row: string) => (
-            <ListItem dense button className={classes.nested}>
+          {item.value.map((row: string, index: number) => (
+            <ListItem
+              key={`${row}-${index}`}
+              dense
+              button
+              className={classes.nested}
+            >
               <ListItemText primary={row} />
               <ListItemIcon>
                 <Chip variant="outlined" label="12.6m/s" />
               </ListItemIcon>
             </ListItem>
           ))}
-        </>
+        </div>
       ))}
     </>
   );

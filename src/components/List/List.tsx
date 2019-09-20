@@ -42,8 +42,8 @@ const List = () => {
       }}
     >
       <ListHeader />
-      {Object.keys(testData).map(item => (
-        <ListRow rowTitle={item} />
+      {Object.keys(testData).map((item, index) => (
+        <ListRow key={`list-row-${index}`} rowTitle={item} />
       ))}
     </Drawer>
   );
