@@ -1,0 +1,13 @@
+{
+    "extends": "airbnb",
+    "env": {
+        "node": true,
+        "es6": true,
+        "browser": true
+    },
+    "rules": {
+        "comma-dangle": ["error", "never"],
+        "indent": ["error", 4],
+        "no-return-await": 0
+    }
+}
