@@ -1,9 +1,11 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
+// Components
+import { Auth } from "../Auth";
+
 // Material UI Components
 import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -17,19 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
     appbar: { zIndex: theme.zIndex.drawer + 1 },
     listIcon: {
       [theme.breakpoints.down("xs")]: {
-        display: "none"
-      }
-    },
-    buttons: {
-      [theme.breakpoints.down("xs")]: {
-        display: "none"
-      }
-    },
-    leftButton: {
-      marginRight: "1em"
-    },
-    menuIcon: {
-      [theme.breakpoints.up("sm")]: {
         display: "none"
       }
     }
@@ -53,22 +42,7 @@ const NavBar = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <div className={classes.buttons}>
-              <Button
-                size="small"
-                variant="contained"
-                color="primary"
-                className={classes.leftButton}
-              >
-                Get Started
-              </Button>
-              <Button size="small">Sign In</Button>
-            </div>
-            <div className={classes.menuIcon}>
-              <IconButton>
-                <MenuIcon />
-              </IconButton>
-            </div>
+            <Auth />
           </Grid>
         </Grid>
       </Toolbar>
