@@ -1,8 +1,12 @@
 import React from "react";
+import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
+// Actions
+import { getRiverList } from "./actions";
+
 // Constants
-import { drawerWidth, testData } from "../../constants";
+import { drawerWidth } from "../../constants";
 
 // Components
 import { ListHeader } from "../ListHeader";
@@ -10,6 +14,8 @@ import { ListRow } from "../ListRow";
 
 // Material UI Components
 import Drawer from "@material-ui/core/Drawer";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,12 +31,26 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down("xs")]: {
         width: "100%"
       }
+    },
+    progress: {
+      margin: "auto",
+      marginTop: theme.spacing(3)
+    },
+    error: {
+      margin: "auto",
+      marginTop: theme.spacing(1),
+      color: "#ef5350"
     }
   })
 );
 
-const List = () => {
+const List = ({ rivers, isLoading, hasError, getRiverList }: any) => {
   const classes = useStyles();
+
+  React.useEffect(() => {
+    getRiverList();
+  }, []);
+
   return (
     <Drawer
       className={classes.drawer}
@@ -42,11 +62,27 @@ const List = () => {
       }}
     >
       <ListHeader />
-      {Object.keys(testData).map((item, index) => (
-        <ListRow key={`list-row-${index}`} rowTitle={item} />
+
+      {hasError && (
+        <Typography className={classes.error}>
+          Something went wrong. Please Reload and try again.
+        </Typography>
+      )}
+      {isLoading && <CircularProgress className={classes.progress} />}
+      {rivers.map((region: any, index: number) => (
+        <ListRow key={`list-row-${index}`} rowTitle={region.region} />
       ))}
     </Drawer>
   );
 };
 
-export default List;
+const mapStateToProps = (state: any) => ({
+  rivers: state.rivers.rivers,
+  isLoading: state.rivers.loading,
+  hasError: state.rivers.error
+});
+
+export default connect(
+  mapStateToProps,
+  { getRiverList }
+)(List);
