@@ -6,31 +6,35 @@ const initialState = {
   error: false
 };
 
+const isLoading = (state: any) => ({
+  ...state,
+  loading: true
+});
+
+const isNotLoading = (state: any) => ({
+  ...state,
+  loading: false
+});
+
+const error = (state: any) => ({
+  ...state,
+  loading: false,
+  error: true
+});
+
+const setAllRivers = (state: any, action: any) => ({
+  ...state,
+  rivers: action.payload
+});
+
+const actionMap: { [key: string]: any } = {
+  [LOADING]: isLoading,
+  [NOT_LOADING]: isNotLoading,
+  [ERROR]: error,
+  [SET_ALL_RIVERS]: setAllRivers
+};
+
 export default function(state = initialState, action: any) {
-  switch (action.type) {
-    case LOADING:
-      return {
-        ...state,
-        loading: true,
-        error: false
-      };
-    case NOT_LOADING:
-      return {
-        ...state,
-        loading: false
-      };
-    case SET_ALL_RIVERS:
-      return {
-        ...state,
-        rivers: action.payload
-      };
-    case ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: true
-      };
-    default:
-      return state;
-  }
+  const method = actionMap[action.type];
+  return method ? method(state, action) : state;
 }
