@@ -13,12 +13,18 @@ import { NavBar } from "./components/NavBar";
 import { List } from "./components/List";
 
 const App: React.FC = () => {
+  const [listOpen, setListOpen] = React.useState(true);
+
+  function toggleListOpen() {
+    setListOpen(prev => !prev);
+  }
+
   return (
     <Provider store={store}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
-        <NavBar />
-        <List />
+        <NavBar toggleListOpen={toggleListOpen} />
+        <List open={listOpen} />
       </MuiThemeProvider>
     </Provider>
   );

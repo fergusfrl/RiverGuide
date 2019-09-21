@@ -44,19 +44,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const List = ({ rivers, isLoading, hasError, getRiverList }: any) => {
+const List = ({ open, rivers, isLoading, hasError, getRiverList }: any) => {
   const classes = useStyles();
 
   React.useEffect(() => {
     getRiverList();
-  }, []);
+  }, [getRiverList]);
 
   return (
     <Drawer
       className={classes.drawer}
       variant="persistent"
       anchor="left"
-      open
+      open={open}
       classes={{
         paper: classes.drawerPaper
       }}

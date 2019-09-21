@@ -25,14 +25,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const NavBar = () => {
+const NavBar = ({ toggleListOpen }: any) => {
   const classes = useStyles();
   return (
     <AppBar position="fixed" color="secondary" className={classes.appbar}>
       <Toolbar>
         <Grid container justify="space-between" alignItems="center">
           <Grid item className={classes.listIcon}>
-            <IconButton color="primary">
+            <IconButton color="primary" onClick={toggleListOpen}>
               <MenuIcon />
             </IconButton>
           </Grid>
