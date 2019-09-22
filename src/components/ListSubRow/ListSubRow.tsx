@@ -16,26 +16,30 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ListSubRow = ({ values }: any) => {
+const ListSubRow = ({ rivers, runs }: any) => {
   const classes = useStyles();
   return (
     <>
-      {values.map((item: any, index: number) => (
-        <div key={`${item.name}-${index}`}>
-          <ListSubheader>{item.name}</ListSubheader>
-          {item.value.map((row: string, index: number) => (
-            <ListItem
-              key={`${row}-${index}`}
-              dense
-              button
-              className={classes.nested}
-            >
-              <ListItemText primary={row} />
-              <ListItemIcon>
-                <Chip variant="outlined" label="12.6m/s" />
-              </ListItemIcon>
-            </ListItem>
-          ))}
+      {rivers.map((river: any, index: number) => (
+        <div key={`${river.name}-${index}`}>
+          <ListSubheader>{river.name}</ListSubheader>
+
+          {runs
+            .filter((run: any) => run.riverId === river.id)
+            .map((run: any, index: number) => (
+              <ListItem
+                key={`${run.name}-${index}`}
+                dense
+                button
+                className={classes.nested}
+              >
+                {" "}
+                <ListItemText primary={run.name} />
+                <ListItemIcon>
+                  <Chip variant="outlined" label="12.6m/s" />
+                </ListItemIcon>
+              </ListItem>
+            ))}
         </div>
       ))}
     </>

@@ -70,7 +70,12 @@ const List = ({ open, rivers, isLoading, hasError, getRiverList }: any) => {
       )}
       {isLoading && <CircularProgress className={classes.progress} />}
       {rivers.map((region: any, index: number) => (
-        <ListRow key={`list-row-${index}`} rowTitle={region.region} />
+        <ListRow
+          key={`list-row-${index}`}
+          rowTitle={region.region}
+          rivers={region.rivers}
+          runs={region.runs}
+        />
       ))}
     </Drawer>
   );
