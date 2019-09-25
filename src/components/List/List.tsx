@@ -62,7 +62,6 @@ const List = ({ open, rivers, isLoading, hasError, getRiverList }: any) => {
       }}
     >
       <ListHeader />
-
       {hasError && (
         <Typography className={classes.error}>
           Something went wrong. Please Reload and try again.
