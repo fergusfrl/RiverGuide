@@ -11,12 +11,18 @@ import store from "./store";
 
 import { NavBar } from "./components/NavBar";
 import { List } from "./components/List";
+import { FilterPanel } from "./components/FilterPanel";
 
 const App: React.FC = () => {
   const [listOpen, setListOpen] = React.useState(true);
+  const [filterOpen, setFilterOpen] = React.useState(false);
 
   function toggleListOpen() {
     setListOpen(prev => !prev);
+  }
+
+  function toggleFilterOpen() {
+    setFilterOpen(prev => !prev);
   }
 
   return (
@@ -24,7 +30,11 @@ const App: React.FC = () => {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <NavBar toggleListOpen={toggleListOpen} />
-        <List open={listOpen} />
+        <List open={listOpen} openFilter={toggleFilterOpen} />
+        <FilterPanel
+          open={listOpen && filterOpen}
+          closeFilter={toggleFilterOpen}
+        />
       </MuiThemeProvider>
     </Provider>
   );

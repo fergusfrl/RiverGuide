@@ -44,7 +44,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const List = ({ open, rivers, isLoading, hasError, getRiverList }: any) => {
+const List = ({
+  open,
+  rivers,
+  isLoading,
+  hasError,
+  getRiverList,
+  openFilter
+}: any) => {
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -61,7 +68,7 @@ const List = ({ open, rivers, isLoading, hasError, getRiverList }: any) => {
         paper: classes.drawerPaper
       }}
     >
-      <ListHeader />
+      <ListHeader openFilter={openFilter} />
       {hasError && (
         <Typography className={classes.error}>
           Something went wrong. Please Reload and try again.

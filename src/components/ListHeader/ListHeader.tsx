@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ListHeader = ({ searchRivers }: any) => {
+const ListHeader = ({ searchRivers, openFilter }: any) => {
   const classes = useStyles();
   const [searchValue, setSearchValue] = React.useState("");
 
@@ -53,7 +53,9 @@ const ListHeader = ({ searchRivers }: any) => {
   }
 
   function handleClear() {
-    handleSearch("");
+    if (searchValue) {
+      handleSearch("");
+    }
   }
 
   function handleSearch(value: string) {
@@ -71,11 +73,19 @@ const ListHeader = ({ searchRivers }: any) => {
           inputProps={{ "aria-label": "search google maps" }}
           onChange={searchList}
         />
-        <IconButton className={classes.iconButton} onClick={handleClear} aria-label="search">
-          { searchValue ? <CloseIcon /> : <SearchIcon />}
+        <IconButton
+          className={classes.iconButton}
+          onClick={handleClear}
+          aria-label="search"
+        >
+          {searchValue ? <CloseIcon /> : <SearchIcon />}
         </IconButton>
         <Divider className={classes.divider} orientation="vertical" />
-        <IconButton className={classes.iconButton} aria-label="directions">
+        <IconButton
+          className={classes.iconButton}
+          aria-label="directions"
+          onClick={openFilter}
+        >
           <FilterIcon />
         </IconButton>
       </Paper>
