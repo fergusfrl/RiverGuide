@@ -75,9 +75,9 @@ const List = ({
         </Typography>
       )}
       {isLoading && <CircularProgress className={classes.progress} />}
-      {rivers.map((region: any, index: number) => (
+      {rivers.map((region: any) => (
         <ListRow
-          key={`list-row-${index}`}
+          key={`list-row-${region.region}`}
           rowTitle={region.region}
           rivers={region.rivers}
           runs={region.runs}
