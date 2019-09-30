@@ -5,8 +5,6 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Chip from "@material-ui/core/Chip";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,9 +35,9 @@ const ListSubRow = ({ rivers }: any) => {
                 className={classes.nested}
               >
                 <ListItemText primary={riverSection.section_name} />
-                <ListItemIcon>
-                  {/* <Chip variant="outlined" label="12.6m/s" /> */}
-                </ListItemIcon>
+                {/* <ListItemIcon>
+                  <Chip variant="outlined" label="12.6m/s" />
+                </ListItemIcon> */}
               </ListItem>
             ))
             .sort((a: any, b: any) => (a.river_name > b.river_name ? 1 : -1))}

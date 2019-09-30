@@ -6,9 +6,9 @@ import List from "./List";
 
 // TODO: mock store
 
-it("renders list without crashing", () => {
+it("renders list without crashing", async () => {
   const div = document.createElement("div");
-  ReactDOM.render(
+  await ReactDOM.render(
     <Provider store={store}>
       <List />
     </Provider>,

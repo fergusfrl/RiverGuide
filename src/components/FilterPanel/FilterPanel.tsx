@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
 // Components
@@ -16,21 +17,6 @@ import Button from "@material-ui/core/Button";
 
 // Material UI Icons
 import CloseIcon from "@material-ui/icons/Close";
-
-const riverClasses = [
-  "Class 1",
-  "Class 2",
-  "Class 3",
-  "Class 4",
-  "Class 5",
-  "Class 5+"
-];
-const riverStyles = [
-  "Big Water",
-  "Boulder Garden",
-  "High Water Gorge",
-  "Low Water Gorge"
-];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const FilterPanel = ({ open, closeFilter }: any) => {
+const FilterPanel = ({ open, closeFilter, grades }: any) => {
   const classes = useStyles();
 
   return (
@@ -89,11 +75,7 @@ const FilterPanel = ({ open, closeFilter }: any) => {
           </IconButton>
         </Grid>
       </Grid>
-      <Button color="primary" className={classes.resetButton}>
-        Reset All
-      </Button>
-      <FilterItem values={riverClasses} name="Grades" />
-      <FilterItem values={riverStyles} name="Paddle Style" />
+      <FilterItem values={grades} name="Grades" />
       <Grid container justify="flex-end" className={classes.buttons}>
         <Grid item>
           <Button onClick={closeFilter} className={classes.filterButton}>
@@ -115,4 +97,20 @@ const FilterPanel = ({ open, closeFilter }: any) => {
   );
 };
 
-export default FilterPanel;
+const mapStateToProps = (state: any) => ({
+  grades: state.rivers.allRivers
+    .filter((river: any) => river.key_facts_char.grade_overall)
+    .map((river: any) => river.key_facts_char.grade_overall)
+    .filter((grade: string) => grade.length < 3)
+    .reduce(
+      (unique: string[], grade: string) =>
+        unique.includes(grade) ? unique : [...unique, grade],
+      []
+    )
+    .sort()
+});
+
+export default connect(
+  mapStateToProps,
+  {}
+)(FilterPanel);
