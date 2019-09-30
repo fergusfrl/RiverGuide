@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const List = ({
   open,
+  regions,
   rivers,
   isLoading,
   hasError,
@@ -75,19 +76,26 @@ const List = ({
         </Typography>
       )}
       {isLoading && <CircularProgress className={classes.progress} />}
-      {rivers.map((region: any) => (
-        <ListRow
-          key={`list-row-${region.region}`}
-          rowTitle={region.region}
-          rivers={region.rivers}
-          runs={region.runs}
-        />
-      ))}
+      {regions.map((region: any) => {
+        const regionRivers = rivers.filter(
+          (river: any) => river.region === region
+        );
+        return (
+          <ListRow
+            key={`list-row-${region}`}
+            region={region}
+            rivers={regionRivers}
+          />
+        );
+      })}
     </Drawer>
   );
 };
 
 const mapStateToProps = (state: any) => ({
+  regions: Array.from(
+    new Set(state.rivers.rivers.map((river: any) => river.region)).values()
+  ).sort(),
   rivers: state.rivers.rivers,
   isLoading: state.rivers.loading,
   hasError: state.rivers.error

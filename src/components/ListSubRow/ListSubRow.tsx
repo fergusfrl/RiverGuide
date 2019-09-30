@@ -16,30 +16,33 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ListSubRow = ({ rivers, runs }: any) => {
+const ListSubRow = ({ rivers }: any) => {
   const classes = useStyles();
+  const riverSet = Array.from(
+    new Set(rivers.map((river: any) => river.river_name)).values()
+  ).sort();
+
   return (
     <>
-      {rivers.map((river: any, index: number) => (
-        <div key={`${river.name}-${index}`}>
-          <ListSubheader>{river.name}</ListSubheader>
-
-          {runs
-            .filter((run: any) => run.riverId === river.id)
-            .map((run: any, index: number) => (
+      {riverSet.map((river: any, index: number) => (
+        <div key={`${river}-${index}`}>
+          <ListSubheader>{river}</ListSubheader>
+          {rivers
+            .filter((riverSection: any) => riverSection.river_name === river)
+            .map((riverSection: any) => (
               <ListItem
-                key={`${run.name}-${index}`}
+                key={`${riverSection.section_name}-${index}`}
                 dense
                 button
                 className={classes.nested}
               >
-                {" "}
-                <ListItemText primary={run.name} />
+                <ListItemText primary={riverSection.section_name} />
                 <ListItemIcon>
-                  <Chip variant="outlined" label="12.6m/s" />
+                  {/* <Chip variant="outlined" label="12.6m/s" /> */}
                 </ListItemIcon>
               </ListItem>
-            ))}
+            ))
+            .sort((a: any, b: any) => (a.river_name > b.river_name ? 1 : -1))}
         </div>
       ))}
     </>

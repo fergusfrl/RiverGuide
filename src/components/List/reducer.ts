@@ -31,8 +31,8 @@ const setAllRivers = (state: any, action: any) => ({
 });
 
 const filterRivers = (state: any, action: any) => ({
-  ...state,
-  rivers: state.allRivers.filter((river: any) => river.region.toLowerCase().includes(action.payload.toLowerCase()))
+  ...state
+  // rivers: state.allRivers.filter((river: any) => river.region.toLowerCase().includes(action.payload.toLowerCase()))
 });
 
 const actionMap: { [key: string]: any } = {
