@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
         display: "none"
       }
     },
-    leftButton: {
-      marginRight: "1em"
+    rightButton: {
+      marginLeft: "1em"
     },
     menuIcon: {
       [theme.breakpoints.up("sm")]: {
@@ -41,33 +41,26 @@ const Auth = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  function handleOpen(event: any) {
-    setAnchorEl(event.currentTarget);
-  }
-
-  function handleClose() {
-    setAnchorEl(null);
+  function toggleMenu(event: any) {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
   }
 
   return (
     <>
       <div className={classes.buttons}>
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          className={classes.leftButton}
-        >
+        <Button size="small" variant="contained" color="primary">
           Get Started
         </Button>
-        <Button size="small">Sign In</Button>
+        <Button size="small" className={classes.rightButton}>
+          Sign In
+        </Button>
       </div>
       <div className={classes.menuIcon}>
-        <IconButton onClick={handleOpen}>
+        <IconButton onClick={toggleMenu}>
           <MenuIcon />
         </IconButton>
       </div>
-      <AuthMenu handleClose={handleClose} anchorEl={anchorEl} />
+      <AuthMenu anchorEl={anchorEl} handleClose={toggleMenu} />
     </>
   );
 };
