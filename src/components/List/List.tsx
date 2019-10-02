@@ -44,39 +44,58 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const List = ({ rivers, isLoading, hasError, getRiverList }: any) => {
+const List = ({
+  open,
+  regions,
+  rivers,
+  isLoading,
+  hasError,
+  getRiverList,
+  openFilter
+}: any) => {
   const classes = useStyles();
 
   React.useEffect(() => {
     getRiverList();
-  }, []);
+  }, [getRiverList]);
 
   return (
     <Drawer
       className={classes.drawer}
       variant="persistent"
       anchor="left"
-      open
+      open={open}
       classes={{
         paper: classes.drawerPaper
       }}
     >
-      <ListHeader />
-
+      <ListHeader openFilter={openFilter} />
       {hasError && (
         <Typography className={classes.error}>
           Something went wrong. Please Reload and try again.
         </Typography>
       )}
       {isLoading && <CircularProgress className={classes.progress} />}
-      {rivers.map((region: any, index: number) => (
-        <ListRow key={`list-row-${index}`} rowTitle={region.region} />
-      ))}
+      {regions.map((region: any) => {
+        const regionRivers = rivers.filter(
+          (river: any) => river.region === region
+        );
+        return (
+          <ListRow
+            key={`list-row-${region}`}
+            region={region}
+            rivers={regionRivers}
+          />
+        );
+      })}
     </Drawer>
   );
 };
 
 const mapStateToProps = (state: any) => ({
+  regions: Array.from(
+    new Set(state.rivers.rivers.map((river: any) => river.region)).values()
+  ).sort(),
   rivers: state.rivers.rivers,
   isLoading: state.rivers.loading,
   hasError: state.rivers.error

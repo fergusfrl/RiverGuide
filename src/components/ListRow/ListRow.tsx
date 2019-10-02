@@ -1,9 +1,6 @@
 import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
-// Constants
-import { subData } from "../../constants";
-
 // Components
 import { ListSubRow } from "../ListSubRow";
 
@@ -17,7 +14,8 @@ import Collapse from "@material-ui/core/Collapse";
 import Typography from "@material-ui/core/Typography";
 
 interface ListRowPropsI {
-  rowTitle: string;
+  region: string;
+  rivers: any[];
 }
 
 const useStyles = makeStyles(() =>
@@ -29,7 +27,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const ListRow = ({ rowTitle }: ListRowPropsI) => {
+const ListRow = ({ region, rivers }: ListRowPropsI) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -43,18 +41,18 @@ const ListRow = ({ rowTitle }: ListRowPropsI) => {
         <ListItemText
           primary={
             <Typography color={open ? "primary" : "textPrimary"}>
-              {rowTitle}
+              {region}
             </Typography>
           }
         />
         <ListItemIcon className={classes.count}>
-          <Typography color={open ? "primary" : "textPrimary"}>5</Typography>
+          <Typography color={open ? "primary" : "textPrimary"}>
+            {rivers.length}
+          </Typography>
         </ListItemIcon>
       </ListItem>
       <Collapse in={open}>
-        <List>
-          <ListSubRow values={subData} />
-        </List>
+        <List>{<ListSubRow rivers={rivers} />}</List>
       </Collapse>
       <Divider />
     </div>

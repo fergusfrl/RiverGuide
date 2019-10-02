@@ -1,5 +1,9 @@
 import React from "react";
+import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+
+// Actions
+import { searchRivers } from "./actions";
 
 // Material UI Components
 import AppBar from "@material-ui/core/AppBar";
@@ -10,6 +14,7 @@ import Divider from "@material-ui/core/Divider";
 
 // Material UI Icons
 import SearchIcon from "@material-ui/icons/Search";
+import CloseIcon from "@material-ui/icons/Close";
 import FilterIcon from "@material-ui/icons/FilterList";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,21 +44,48 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ListHeader = () => {
+const ListHeader = ({ searchRivers, openFilter }: any) => {
   const classes = useStyles();
+  const [searchValue, setSearchValue] = React.useState("");
+
+  function searchList(event: any) {
+    handleSearch(event.target.value);
+  }
+
+  function handleClear() {
+    if (searchValue) {
+      handleSearch("");
+    }
+  }
+
+  function handleSearch(value: string) {
+    setSearchValue(value);
+    searchRivers(value);
+  }
+
   return (
     <AppBar position="sticky" className={classes.listHeader}>
       <Paper className={classes.paper} elevation={4}>
         <InputBase
+          value={searchValue}
           className={classes.input}
           placeholder="Search"
           inputProps={{ "aria-label": "search google maps" }}
+          onChange={searchList}
         />
-        <IconButton className={classes.iconButton} aria-label="search">
-          <SearchIcon />
+        <IconButton
+          className={classes.iconButton}
+          onClick={handleClear}
+          aria-label="search"
+        >
+          {searchValue ? <CloseIcon /> : <SearchIcon />}
         </IconButton>
         <Divider className={classes.divider} orientation="vertical" />
-        <IconButton className={classes.iconButton} aria-label="directions">
+        <IconButton
+          className={classes.iconButton}
+          aria-label="directions"
+          onClick={openFilter}
+        >
           <FilterIcon />
         </IconButton>
       </Paper>
@@ -61,4 +93,7 @@ const ListHeader = () => {
   );
 };
 
-export default ListHeader;
+export default connect(
+  null,
+  { searchRivers }
+)(ListHeader);

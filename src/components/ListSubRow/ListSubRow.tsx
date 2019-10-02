@@ -5,8 +5,6 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Chip from "@material-ui/core/Chip";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,26 +14,33 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ListSubRow = ({ values }: any) => {
+const ListSubRow = ({ rivers }: any) => {
   const classes = useStyles();
+  const riverSet = Array.from(
+    new Set(rivers.map((river: any) => river.river_name)).values()
+  ).sort();
+
   return (
     <>
-      {values.map((item: any, index: number) => (
-        <div key={`${item.name}-${index}`}>
-          <ListSubheader>{item.name}</ListSubheader>
-          {item.value.map((row: string, index: number) => (
-            <ListItem
-              key={`${row}-${index}`}
-              dense
-              button
-              className={classes.nested}
-            >
-              <ListItemText primary={row} />
-              <ListItemIcon>
-                <Chip variant="outlined" label="12.6m/s" />
-              </ListItemIcon>
-            </ListItem>
-          ))}
+      {riverSet.map((river: any, index: number) => (
+        <div key={`${river}-${index}`}>
+          <ListSubheader>{river}</ListSubheader>
+          {rivers
+            .filter((riverSection: any) => riverSection.river_name === river)
+            .map((riverSection: any) => (
+              <ListItem
+                key={`${riverSection.section_name}-${index}`}
+                dense
+                button
+                className={classes.nested}
+              >
+                <ListItemText primary={riverSection.section_name} />
+                {/* <ListItemIcon>
+                  <Chip variant="outlined" label="12.6m/s" />
+                </ListItemIcon> */}
+              </ListItem>
+            ))
+            .sort((a: any, b: any) => (a.river_name > b.river_name ? 1 : -1))}
         </div>
       ))}
     </>

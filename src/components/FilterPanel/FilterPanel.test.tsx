@@ -2,15 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import store from "../../store";
-import List from "./List";
+import FilterPanel from "./FilterPanel";
 
-// TODO: mock store
+// TODO: Mock store
 
-it("renders list without crashing", async () => {
+it("renders filter panel without crashing", async () => {
   const div = document.createElement("div");
   await ReactDOM.render(
     <Provider store={store}>
-      <List />
+      <FilterPanel open closeFilters={() => console.log("test")} />
     </Provider>,
     div
   );
