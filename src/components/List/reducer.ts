@@ -7,9 +7,7 @@ const initialState = {
   loading: false,
   error: false,
   searchStr: "",
-  filters: {
-    // grade_overall: ["3", "3+", "4"]
-  }
+  filters: {}
 };
 
 const isLoading = (state: any) => ({
@@ -39,7 +37,8 @@ const setSearchStr = (state: any, action: any) => ({
 });
 
 const setFilters = (state: any, action: any) => ({
-  ...state
+  ...state,
+  filters: action.payload
 });
 
 const actionMap: { [key: string]: any } = {

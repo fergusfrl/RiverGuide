@@ -2,9 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import uniq from "lodash/uniq";
-import isEmpty from "lodash/isEmpty";
-import size from "lodash/size";
-import keys from "lodash/keys";
+
+// Utils
+import { applySearchValues, applyFilterValues } from "../../utils";
 
 // Actions
 import { getRiverList } from "./actions";
@@ -98,30 +98,8 @@ const List = ({
 
 const filterAndSearchRivers = (rivers: any, searchStr: string, filters: any) =>
   rivers
-    .filter(
-      (river: any) =>
-        river.region.toLowerCase().includes(searchStr) ||
-        river.river_name.toLowerCase().includes(searchStr) ||
-        river.section_name.toLowerCase().includes(searchStr)
-    )
-    .filter((river: any) => {
-      // this code works but is admittedly unreadable
-      if (size(filters) === 0) return true;
-      if (size(filters) > size(river.key_facts_char)) return false;
-
-      return !isEmpty(
-        keys(river.key_facts_char)
-          .map((attr: any) => ({
-            name: attr,
-            value: river.key_facts_char[attr]
-          }))
-          .map(
-            (fil: any) =>
-              filters[fil.name] && filters[fil.name].includes(fil.value)
-          )
-          .filter((val: boolean) => val)
-      );
-    });
+    .filter(applySearchValues(searchStr))
+    .filter(applyFilterValues(filters));
 
 const mapStateToProps = (state: any) => ({
   regions: uniq(
