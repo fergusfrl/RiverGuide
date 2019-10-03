@@ -1,1 +1,1 @@
-export const FILTER_RIVERS: string = "FILTER_RIVERS";
+export const SEARCH_RIVERS: string = "SEARCH_RIVERS";

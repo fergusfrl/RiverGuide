@@ -1,12 +1,12 @@
 import { ThunkDispatch } from "redux-thunk";
 
-import { FILTER_RIVERS } from "./actionTypes";
+import { SEARCH_RIVERS } from "./actionTypes";
 
 export const searchRivers = (searchString: string) => (
   dispatch: ThunkDispatch<{}, {}, any>
 ) => {
   dispatch({
-    type: FILTER_RIVERS,
+    type: SEARCH_RIVERS,
     payload: searchString
   });
 };

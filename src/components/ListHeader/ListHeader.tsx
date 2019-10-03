@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import debounce from "lodash/debounce";
 
 // Actions
 import { searchRivers } from "./actions";
@@ -60,7 +61,7 @@ const ListHeader = ({ searchRivers, openFilter }: any) => {
 
   function handleSearch(value: string) {
     setSearchValue(value);
-    searchRivers(value);
+    debounce(() => searchRivers(value), 300)();
   }
 
   return (

@@ -1,11 +1,15 @@
 import { LOADING, NOT_LOADING, SET_ALL_RIVERS, ERROR } from "./actionTypes";
-import { FILTER_RIVERS } from "../ListHeader/actionTypes";
+import { SEARCH_RIVERS } from "../ListHeader/actionTypes";
+import { FILTER_RIVERS } from "../FilterPanel/actionTypes";
 
 const initialState = {
-  allRivers: [],
   rivers: [],
   loading: false,
-  error: false
+  error: false,
+  searchStr: "",
+  filters: {
+    // grade_overall: ["3", "3+", "4"]
+  }
 };
 
 const isLoading = (state: any) => ({
@@ -26,18 +30,16 @@ const error = (state: any) => ({
 
 const setAllRivers = (state: any, action: any) => ({
   ...state,
-  rivers: action.payload,
-  allRivers: action.payload
+  rivers: action.payload
 });
 
-const filterRivers = (state: any, action: any) => ({
+const setSearchStr = (state: any, action: any) => ({
   ...state,
-  rivers: state.allRivers.filter(
-    (river: any) =>
-      river.region.toLowerCase().includes(action.payload.toLowerCase()) ||
-      river.river_name.toLowerCase().includes(action.payload.toLowerCase()) ||
-      river.section_name.toLowerCase().includes(action.payload.toLowerCase())
-  )
+  searchStr: action.payload.toLowerCase()
+});
+
+const setFilters = (state: any, action: any) => ({
+  ...state
 });
 
 const actionMap: { [key: string]: any } = {
@@ -45,7 +47,8 @@ const actionMap: { [key: string]: any } = {
   [NOT_LOADING]: isNotLoading,
   [ERROR]: error,
   [SET_ALL_RIVERS]: setAllRivers,
-  [FILTER_RIVERS]: filterRivers
+  [SEARCH_RIVERS]: setSearchStr,
+  [FILTER_RIVERS]: setFilters
 };
 
 export default function(state = initialState, action: any) {
