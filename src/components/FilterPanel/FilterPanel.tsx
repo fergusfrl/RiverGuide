@@ -1,10 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import uniq from "lodash/uniq";
+
+// utils
+import { reduceFilterValues } from "../../utils";
 
 // Components
-import { FilterItem } from "../FilterItem";
+// import { FilterItem } from "../FilterItem";
 
 // Constants
 import { drawerWidth } from "../../constants";
@@ -76,7 +78,7 @@ const FilterPanel = ({ open, closeFilter, grades, clearFilters }: any) => {
           </IconButton>
         </Grid>
       </Grid>
-      <FilterItem values={grades} name="Grades" />
+      {/* <FilterItem values={grades} name="Grades" /> */}
       <Grid container justify="flex-end" className={classes.buttons}>
         <Grid item>
           <Button onClick={closeFilter} className={classes.filterButton}>
@@ -99,12 +101,9 @@ const FilterPanel = ({ open, closeFilter, grades, clearFilters }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  grades: uniq(
-    state.rivers.rivers
-      .filter((river: any) => river.key_facts_char.grade_overall)
-      .map((river: any) => river.key_facts_char.grade_overall)
-      .filter((grade: string) => grade.length < 3)
-  ).sort()
+  filterValues: state.rivers.rivers
+    .map((river: any) => river.key_facts_char)
+    .reduce(reduceFilterValues, {})
 });
 
 export default connect(
