@@ -7,10 +7,3 @@ export const filterRivers = () => (dispatch: ThunkDispatch<{}, {}, any>) => {
     payload: []
   });
 };
-
-export const clearFilters = () => (dispatch: ThunkDispatch<{}, {}, any>) => {
-  dispatch({
-    type: FILTER_RIVERS,
-    payload: []
-  });
-};
