@@ -1,4 +1,13 @@
-import { LOADING, NOT_LOADING, SET_ALL_RIVERS, ERROR } from "./actionTypes";
+import {
+  LOADING,
+  NOT_LOADING,
+  SET_ALL_RIVERS,
+  ERROR,
+  SET_TELE,
+  TELE_ERROR,
+  NOT_LOADING_TELE,
+  LOADING_TELE
+} from "./actionTypes";
 import { SEARCH_RIVERS } from "../ListHeader/actionTypes";
 import { FILTER_RIVERS } from "../FilterPanel/actionTypes";
 
@@ -7,7 +16,10 @@ const initialState = {
   loading: false,
   error: false,
   searchStr: "",
-  filters: {}
+  filters: {},
+  telemeteryData: [],
+  loadingTele: false,
+  teleError: false
 };
 
 const isLoading = (state: any) => ({
@@ -22,7 +34,6 @@ const isNotLoading = (state: any) => ({
 
 const error = (state: any) => ({
   ...state,
-  loading: false,
   error: true
 });
 
@@ -41,13 +52,37 @@ const setFilters = (state: any, action: any) => ({
   filters: action.payload
 });
 
+const setTelemeteryData = (state: any, action: any) => ({
+  ...state,
+  telemeteryData: action.payload
+});
+
+const isLoadingTele = (state: any) => ({
+  ...state,
+  loadingTele: true
+});
+
+const isNotLoadingTele = (state: any) => ({
+  ...state,
+  loadingTele: false
+});
+
+const teleError = (state: any) => ({
+  ...state,
+  teleError: true
+});
+
 const actionMap: { [key: string]: any } = {
   [LOADING]: isLoading,
   [NOT_LOADING]: isNotLoading,
   [ERROR]: error,
   [SET_ALL_RIVERS]: setAllRivers,
   [SEARCH_RIVERS]: setSearchStr,
-  [FILTER_RIVERS]: setFilters
+  [FILTER_RIVERS]: setFilters,
+  [SET_TELE]: setTelemeteryData,
+  [TELE_ERROR]: teleError,
+  [LOADING_TELE]: isLoadingTele,
+  [NOT_LOADING_TELE]: isNotLoadingTele
 };
 
 export default function(state = initialState, action: any) {

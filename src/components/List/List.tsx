@@ -7,7 +7,7 @@ import uniq from "lodash/uniq";
 import { applySearchValues, applyFilterValues } from "../../utils";
 
 // Actions
-import { getRiverList } from "./actions";
+import { getRiverList, getTelemetryData } from "./actions";
 
 // Constants
 import { drawerWidth } from "../../constants";
@@ -55,13 +55,15 @@ const List = ({
   isLoading,
   hasError,
   getRiverList,
+  getTelemetryData,
   openFilter
 }: any) => {
   const classes = useStyles();
 
   React.useEffect(() => {
     getRiverList();
-  }, [getRiverList]);
+    getTelemetryData();
+  }, [getRiverList, getTelemetryData]);
 
   return (
     <Drawer
@@ -120,5 +122,5 @@ const mapStateToProps = (state: any) => ({
 
 export default connect(
   mapStateToProps,
-  { getRiverList }
+  { getRiverList, getTelemetryData }
 )(List);
