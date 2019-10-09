@@ -1,9 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import uniq from "lodash/uniq";
+
+// Utils
+import { applySearchValues, applyFilterValues } from "../../utils";
 
 // Actions
-import { getRiverList } from "./actions";
+import { getRiverList, getTelemetryData } from "./actions";
 
 // Constants
 import { drawerWidth } from "../../constants";
@@ -51,13 +55,15 @@ const List = ({
   isLoading,
   hasError,
   getRiverList,
+  getTelemetryData,
   openFilter
 }: any) => {
   const classes = useStyles();
 
   React.useEffect(() => {
     getRiverList();
-  }, [getRiverList]);
+    getTelemetryData();
+  }, [getRiverList, getTelemetryData]);
 
   return (
     <Drawer
@@ -92,16 +98,29 @@ const List = ({
   );
 };
 
+const filterAndSearchRivers = (rivers: any, searchStr: string, filters: any) =>
+  rivers
+    .filter(applySearchValues(searchStr))
+    .filter(applyFilterValues(filters));
+
 const mapStateToProps = (state: any) => ({
-  regions: Array.from(
-    new Set(state.rivers.rivers.map((river: any) => river.region)).values()
+  regions: uniq(
+    filterAndSearchRivers(
+      state.rivers.rivers,
+      state.rivers.searchStr,
+      state.rivers.filters
+    ).map((river: any) => river.region)
   ).sort(),
-  rivers: state.rivers.rivers,
+  rivers: filterAndSearchRivers(
+    state.rivers.rivers,
+    state.rivers.searchStr,
+    state.rivers.filters
+  ),
   isLoading: state.rivers.loading,
   hasError: state.rivers.error
 });
 
 export default connect(
   mapStateToProps,
-  { getRiverList }
+  { getRiverList, getTelemetryData }
 )(List);

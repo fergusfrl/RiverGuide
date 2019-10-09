@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import debounce from "lodash/debounce";
 
 // Actions
 import { searchRivers } from "./actions";
@@ -10,12 +11,12 @@ import AppBar from "@material-ui/core/AppBar";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
-import Divider from "@material-ui/core/Divider";
+// import Divider from "@material-ui/core/Divider";
 
 // Material UI Icons
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
-import FilterIcon from "@material-ui/icons/FilterList";
+// import FilterIcon from "@material-ui/icons/FilterList";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,7 +61,7 @@ const ListHeader = ({ searchRivers, openFilter }: any) => {
 
   function handleSearch(value: string) {
     setSearchValue(value);
-    searchRivers(value);
+    debounce(() => searchRivers(value), 300)();
   }
 
   return (
@@ -80,14 +81,14 @@ const ListHeader = ({ searchRivers, openFilter }: any) => {
         >
           {searchValue ? <CloseIcon /> : <SearchIcon />}
         </IconButton>
-        <Divider className={classes.divider} orientation="vertical" />
+        {/* <Divider className={classes.divider} orientation="vertical" />
         <IconButton
           className={classes.iconButton}
           aria-label="directions"
           onClick={openFilter}
         >
           <FilterIcon />
-        </IconButton>
+        </IconButton> */}
       </Paper>
     </AppBar>
   );

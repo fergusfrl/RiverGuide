@@ -2,8 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
+// utils
+import { reduceFilterValues } from "../../utils";
+
 // Components
-import { FilterItem } from "../FilterItem";
+// import { FilterItem } from "../FilterItem";
 
 // Constants
 import { drawerWidth } from "../../constants";
@@ -51,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const FilterPanel = ({ open, closeFilter, grades }: any) => {
+const FilterPanel = ({ open, closeFilter, grades, clearFilters }: any) => {
   const classes = useStyles();
 
   return (
@@ -75,7 +78,7 @@ const FilterPanel = ({ open, closeFilter, grades }: any) => {
           </IconButton>
         </Grid>
       </Grid>
-      <FilterItem values={grades} name="Grades" />
+      {/* <FilterItem values={grades} name="Grades" /> */}
       <Grid container justify="flex-end" className={classes.buttons}>
         <Grid item>
           <Button onClick={closeFilter} className={classes.filterButton}>
@@ -98,16 +101,9 @@ const FilterPanel = ({ open, closeFilter, grades }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  grades: state.rivers.allRivers
-    .filter((river: any) => river.key_facts_char.grade_overall)
-    .map((river: any) => river.key_facts_char.grade_overall)
-    .filter((grade: string) => grade.length < 3)
-    .reduce(
-      (unique: string[], grade: string) =>
-        unique.includes(grade) ? unique : [...unique, grade],
-      []
-    )
-    .sort()
+  filterValues: state.rivers.rivers
+    .map((river: any) => river.key_facts_char)
+    .reduce(reduceFilterValues, {})
 });
 
 export default connect(
