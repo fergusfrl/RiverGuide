@@ -1,5 +1,13 @@
 import { ThunkDispatch } from "redux-thunk";
-import { SET_DETAILS, CLEAR_DETAILS } from "./actionType";
+import axios from "axios";
+import {
+  SET_DETAILS,
+  CLEAR_DETAILS,
+  FLOW_LOADING,
+  HISTORICAL_FLOW_ERROR,
+  SET_HISTORICAL_FLOW,
+  NOT_FLOW_LOADING
+} from "./actionType";
 
 export const setDetails = (river: any) => (
   dispatch: ThunkDispatch<{}, {}, any>
@@ -12,4 +20,29 @@ export const setDetails = (river: any) => (
 
 export const clearDetails = () => (dispatch: ThunkDispatch<{}, {}, any>) => {
   dispatch({ type: CLEAR_DETAILS });
+};
+
+export const getHistoricalRiverData = (gauge_id: string) => (
+  dispatch: ThunkDispatch<{}, {}, any>
+) => {
+  dispatch({ type: FLOW_LOADING });
+  axios
+    .post("https://www.openriverdata.com/", {
+      action: "get_flows",
+      crossDomain: true,
+      id: [gauge_id]
+    })
+    .then(res => {
+      dispatch({
+        type: SET_HISTORICAL_FLOW,
+        payload: res.data.flows
+      });
+    })
+    .catch(err => {
+      dispatch({ type: HISTORICAL_FLOW_ERROR });
+      console.log("Historical Flow Error", err);
+    })
+    .finally(() => {
+      dispatch({ type: NOT_FLOW_LOADING });
+    });
 };

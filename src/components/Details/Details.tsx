@@ -8,10 +8,11 @@ import moment from "moment";
 import { attributeDictionary } from "../../constants";
 
 // Actions
-import { clearDetails } from "./actions";
+import { clearDetails, getHistoricalRiverData } from "./actions";
 
 // Components
 import { DetailsHeader } from "../DetailsHeader";
+import { FlowCard } from "../FlowCard";
 
 // Material UI Components
 import Typography from "@material-ui/core/Typography";
@@ -30,8 +31,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Details = ({ river, clearDetails }: any) => {
+const Details = ({
+  river,
+  clearDetails,
+  telemetryData,
+  getHistoricalRiverData
+}: any) => {
   const classes = useStyles();
+
+  React.useEffect(() => {
+    getHistoricalRiverData(river.gauge_id);
+  });
+
+  const currentGauge =
+    river.gauge_id &&
+    telemetryData.find((site: any) => site.id === river.gauge_id);
 
   const attributes = _(_.merge(river.key_facts_char, river.key_facts_num))
     .map((value: any, key: string) => ({
@@ -61,6 +75,17 @@ const Details = ({ river, clearDetails }: any) => {
         clearDetails={clearDetails}
         attr={attributes}
       />
+      {currentGauge && (
+        <FlowCard
+          currentFlow={currentGauge.observables
+            .find((site: any) => site.type === "flow")
+            .latest_value.toFixed(1)}
+          unit="cumecs"
+          name={currentGauge.name}
+          source={currentGauge.data_source}
+          lastUpdated={moment(currentGauge.last_updated).format("ddd, h:MMa")}
+        />
+      )}
       <Typography
         paragraph
         color="textPrimary"
@@ -74,10 +99,11 @@ const Details = ({ river, clearDetails }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  river: state.details.river
+  river: state.details.river,
+  telemetryData: state.rivers.telemetryData
 });
 
 export default connect(
   mapStateToProps,
-  { clearDetails }
+  { clearDetails, getHistoricalRiverData }
 )(Details);

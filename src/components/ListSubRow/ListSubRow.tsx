@@ -63,7 +63,7 @@ const ListSubRow = ({ rivers, flow, setDetails }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  flow: state.rivers.telemeteryData.map((tele: any) => {
+  flow: state.rivers.telemetryData.map((tele: any) => {
     const flow = tele.observables.find(
       (ob: any) => ob.type === "flow" && ob.units === "cumecs"
     );
