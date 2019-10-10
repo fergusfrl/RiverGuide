@@ -4,8 +4,8 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import moment from "moment";
 
-// Constants
-import { attributeDictionary } from "../../constants";
+// Utils
+import { mapAttributes, mapAttributeValues } from "../../utils";
 
 // Actions
 import { clearDetails, getHistoricalRiverData } from "./actions";
@@ -39,8 +39,9 @@ const Details = ({
 }: any) => {
   const classes = useStyles();
 
+  const getRiverData = async () => await getHistoricalRiverData(river.gauge_id);
   React.useEffect(() => {
-    getHistoricalRiverData(river.gauge_id);
+    if (river.gauge_id) getRiverData();
   });
 
   const currentGauge =
@@ -48,22 +49,8 @@ const Details = ({
     telemetryData.find((site: any) => site.id === river.gauge_id);
 
   const attributes = _(_.merge(river.key_facts_char, river.key_facts_num))
-    .map((value: any, key: string) => ({
-      label: attributeDictionary[key],
-      value
-    }))
-    .map((item: any) => {
-      if (_.isObject(item.value)) {
-        const val = _.isArray(item.value.value)
-          ? `${item.value.value[0]} - ${item.value.value[1]}`
-          : item.value.value;
-        return {
-          ...item,
-          value: `${val} ${item.value.unit}`
-        };
-      }
-      return item;
-    })
+    .map(mapAttributes())
+    .map(mapAttributeValues())
     .value();
 
   return (

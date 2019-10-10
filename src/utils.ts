@@ -2,6 +2,10 @@ import isEmpty from "lodash/isEmpty";
 import size from "lodash/size";
 import keys from "lodash/keys";
 import uniq from "lodash/uniq";
+import isObject from "lodash/isObject";
+import isArray from "lodash/isArray";
+
+import { attributeDictionary } from "./constants";
 
 export const applySearchValues = (searchStr: string) => (river: any) =>
   river.region.toLowerCase().includes(searchStr) ||
@@ -36,4 +40,22 @@ export const reduceFilterValues = () => (acc: any, curr: any) => {
   });
   console.log(acc);
   return acc;
+};
+
+export const mapAttributes = () => (value: any, key: string) => ({
+  label: attributeDictionary[key],
+  value
+});
+
+export const mapAttributeValues = () => (item: any) => {
+  if (isObject(item.value)) {
+    const val = isArray(item.value.value)
+      ? `${item.value.value[0]} - ${item.value.value[1]}`
+      : item.value.value;
+    return {
+      ...item,
+      value: `${val} ${item.value.unit}`
+    };
+  }
+  return item;
 };
