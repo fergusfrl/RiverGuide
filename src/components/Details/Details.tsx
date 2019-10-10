@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import _ from "lodash";
+import moment from "moment";
 
 // Constants
 import { attributeDictionary } from "../../constants";
@@ -14,7 +15,6 @@ import { DetailsHeader } from "../DetailsHeader";
 
 // Material UI Components
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const Details = ({ river, clearDetails }: any) => {
   const classes = useStyles();
 
-  const attributes = _(_.merge(river.key_facts_num, river.key_facts_char))
+  const attributes = _(_.merge(river.key_facts_char, river.key_facts_num))
     .map((value: any, key: string) => ({
       label: attributeDictionary[key],
       value
@@ -61,12 +61,14 @@ const Details = ({ river, clearDetails }: any) => {
         clearDetails={clearDetails}
         attr={attributes}
       />
-      <Divider />
       <Typography
         paragraph
         color="textPrimary"
         dangerouslySetInnerHTML={{ __html: river.description }}
       />
+      <Typography color="textSecondary">
+        Last updated on {moment(river.updatedAt).format("DD/MM/YY, h:MMa")}
+      </Typography>
     </div>
   );
 };

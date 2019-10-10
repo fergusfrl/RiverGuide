@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
+import Divider from "@material-ui/core/Divider";
 
 // Material UI Icons
 import CloseIcon from "@material-ui/icons/Close";
@@ -23,7 +24,10 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: "none"
     },
     attributeChip: {
-      margin: "1em 1em 1em 0"
+      margin: theme.spacing(1, 1, 0, 0)
+    },
+    divider: {
+      marginTop: theme.spacing(2)
     }
   })
 );
@@ -49,7 +53,6 @@ const DetailsHeader = ({
             </Typography>
           </Grid>
           <Grid item>
-            {/* TODO: add star / unstar icon when logged in */}
             <IconButton onClick={clearDetails}>
               <CloseIcon />
             </IconButton>
@@ -69,6 +72,7 @@ const DetailsHeader = ({
           }
         />
       ))}
+      <Divider className={classes.divider} />
     </>
   );
 };
