@@ -24,7 +24,7 @@ const HistoricalFlow = ({ historicalFlow }: any) => {
       timeUnit: "hour",
       count: 1
     };
-    dateAxis.tooltipDateFormat = "HH:mm, d MMMM";
+    dateAxis.tooltipDateFormat = "h:mma, dd MMMM";
     dateAxis.renderer.grid.template.location = 0;
 
     let valueAxis: any = chart.yAxes.push(new ValueAxis());
@@ -41,7 +41,7 @@ const HistoricalFlow = ({ historicalFlow }: any) => {
     let scrollbarX = new XYChartScrollbar();
     scrollbarX.series.push(series);
     chart.scrollbarX = scrollbarX;
-  });
+  }, [historicalFlow]);
 
   return <div id="chartdiv" style={{ width: "100%", height: "300px" }}></div>;
 };
