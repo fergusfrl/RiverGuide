@@ -1,6 +1,9 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
+// Components
+import { HistoricalFlow } from "../HistoricalFlow";
+
 // Material UI Components
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -57,7 +60,9 @@ const FlowCard = ({ currentFlow, unit, name, source, lastUpdated }: any) => {
         </Grid>
       </CardContent>
       <Collapse in={expand}>
-        <CardContent>Historical River Flow</CardContent>
+        <CardContent>
+          <HistoricalFlow />
+        </CardContent>
       </Collapse>
       <Divider />
       <CardActions>

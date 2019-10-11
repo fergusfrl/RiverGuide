@@ -35,7 +35,10 @@ export const getHistoricalRiverData = (gauge_id: string) => (
     .then(res => {
       dispatch({
         type: SET_HISTORICAL_FLOW,
-        payload: res.data.flows
+        payload: {
+          flows: res.data.flows.slice(1, 2000),
+          last_updated: res.data.last_updated
+        }
       });
     })
     .catch(err => {
