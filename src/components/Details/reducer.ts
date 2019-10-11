@@ -4,7 +4,11 @@ import {
   FLOW_LOADING,
   HISTORICAL_FLOW_ERROR,
   NOT_FLOW_LOADING,
-  SET_HISTORICAL_FLOW
+  SET_HISTORICAL_FLOW,
+  WEATHER_ERROR,
+  WEATHER_LOADING,
+  NOT_WEATHER_LOADING,
+  SET_WEATHER
 } from "./actionType";
 
 const initialState = {
@@ -13,7 +17,18 @@ const initialState = {
   isFlowLoading: false,
   historicalFlowError: false,
   historicalFlow: [],
-  lastUpdatedHistroicalFlow: ""
+  lastUpdatedHistroicalFlow: "",
+  weather: {
+    data: {
+      temp: "",
+      desription: "",
+      sunrise: "",
+      sunset: ""
+    },
+    lastUpdated: "",
+    loading: false,
+    error: false
+  }
 };
 
 const setRiver = (state: any, action: any) => ({
@@ -48,13 +63,50 @@ const setHistoricalFlow = (state: any, action: any) => ({
   lastUpdatedHistroicalFlow: action.payload.last_updated
 });
 
+const weatherError = (state: any) => ({
+  ...state,
+  weather: {
+    ...state.weatehr,
+    error: true
+  }
+});
+
+const isWeatherLoading = (state: any) => ({
+  ...state,
+  weather: {
+    ...state.weather,
+    loading: true
+  }
+});
+
+const isNotWeatherLoading = (state: any) => ({
+  ...state,
+  weather: {
+    ...state.weather,
+    loading: false
+  }
+});
+
+const setWeather = (state: any, action: any) => ({
+  ...state,
+  weather: {
+    ...state.weather,
+    lastUpdated: action.payload.lastUpdated,
+    data: action.payload.data
+  }
+});
+
 const actionMap: { [key: string]: any } = {
   [SET_DETAILS]: setRiver,
   [CLEAR_DETAILS]: clearDetails,
   [FLOW_LOADING]: isFlowLoading,
   [NOT_FLOW_LOADING]: isNotFlowLoading,
   [HISTORICAL_FLOW_ERROR]: flowError,
-  [SET_HISTORICAL_FLOW]: setHistoricalFlow
+  [SET_HISTORICAL_FLOW]: setHistoricalFlow,
+  [WEATHER_ERROR]: weatherError,
+  [SET_WEATHER]: setWeather,
+  [WEATHER_LOADING]: isWeatherLoading,
+  [NOT_WEATHER_LOADING]: isNotWeatherLoading
 };
 
 export default function(state = initialState, action: any) {

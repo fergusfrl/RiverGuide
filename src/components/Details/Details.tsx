@@ -8,11 +8,16 @@ import moment from "moment";
 import { mapAttributes, mapAttributeValues } from "../../utils";
 
 // Actions
-import { clearDetails, getHistoricalRiverData } from "./actions";
+import {
+  clearDetails,
+  getHistoricalRiverData,
+  getWeatherData
+} from "./actions";
 
 // Components
 import { DetailsHeader } from "../DetailsHeader";
 import { FlowCard } from "../FlowCard";
+import { WeatherCard } from "../WeatherCard";
 
 // Material UI Components
 import Typography from "@material-ui/core/Typography";
@@ -35,14 +40,20 @@ const Details = ({
   river,
   clearDetails,
   telemetryData,
-  getHistoricalRiverData
+  weather,
+  getHistoricalRiverData,
+  getWeatherData
 }: any) => {
   const classes = useStyles();
 
   const getRiverData = async () => await getHistoricalRiverData(river.gauge_id);
+  const getForcast = async () =>
+    await getWeatherData(river.latitude, river.longitude);
+
   React.useEffect(() => {
     if (river.gauge_id) getRiverData();
-  });
+    if (river.latitude && river.longitude) getForcast();
+  }, []);
 
   const currentGauge =
     river.gauge_id &&
@@ -73,6 +84,14 @@ const Details = ({
           lastUpdated={moment(currentGauge.last_updated).format("ddd, h:MMa")}
         />
       )}
+      {river.latitude && river.longitude && (
+        <WeatherCard
+          currentTemp={weather.data.temp}
+          sunrise={moment.unix(weather.data.sunrise).format("h:MMa")}
+          sunset={moment.unix(weather.data.sunset).format("h:MMa")}
+          lastUpdated={moment.unix(weather.lastUpdated).format("ddd, h:MMa")}
+        />
+      )}
       <Typography
         paragraph
         color="textPrimary"
@@ -87,10 +106,11 @@ const Details = ({
 
 const mapStateToProps = (state: any) => ({
   river: state.details.river,
-  telemetryData: state.rivers.telemetryData
+  telemetryData: state.rivers.telemetryData,
+  weather: state.details.weather
 });
 
 export default connect(
   mapStateToProps,
-  { clearDetails, getHistoricalRiverData }
+  { clearDetails, getHistoricalRiverData, getWeatherData }
 )(Details);

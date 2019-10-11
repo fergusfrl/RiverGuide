@@ -6,7 +6,11 @@ import {
   FLOW_LOADING,
   HISTORICAL_FLOW_ERROR,
   SET_HISTORICAL_FLOW,
-  NOT_FLOW_LOADING
+  NOT_FLOW_LOADING,
+  WEATHER_ERROR,
+  WEATHER_LOADING,
+  NOT_WEATHER_LOADING,
+  SET_WEATHER
 } from "./actionType";
 
 export const setDetails = (river: any) => (
@@ -47,5 +51,36 @@ export const getHistoricalRiverData = (gauge_id: string) => (
     })
     .finally(() => {
       dispatch({ type: NOT_FLOW_LOADING });
+    });
+};
+
+export const getWeatherData = (lat: any, lon: any) => (
+  dispatch: ThunkDispatch<{}, {}, any>
+) => {
+  dispatch({ type: WEATHER_LOADING });
+  axios
+    .get(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=en&mode=json&APPID=521cea2fce8675d0fe0678216dc01d5c`
+    )
+    .then(res => {
+      dispatch({
+        type: SET_WEATHER,
+        payload: {
+          data: {
+            temp: res.data.main.temp,
+            description: res.data.weather.description,
+            sunrise: res.data.sys.sunrise,
+            sunset: res.data.sys.sunset
+          },
+          lastUpdated: res.data.dt
+        }
+      });
+    })
+    .catch(err => {
+      console.log(`Error loading weather data:\n${err}`);
+      dispatch({ type: WEATHER_ERROR });
+    })
+    .finally(() => {
+      dispatch({ type: NOT_WEATHER_LOADING });
     });
 };
