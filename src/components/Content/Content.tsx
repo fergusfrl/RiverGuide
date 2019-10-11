@@ -25,10 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     contentShift: {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen
-      }),
       marginLeft: drawerWidth
     }
   })

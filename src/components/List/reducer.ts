@@ -10,6 +10,7 @@ import {
 } from "./actionTypes";
 import { SEARCH_RIVERS } from "../ListHeader/actionTypes";
 import { FILTER_RIVERS } from "../FilterPanel/actionTypes";
+import {} from "../../utils";
 
 const initialState = {
   rivers: [],

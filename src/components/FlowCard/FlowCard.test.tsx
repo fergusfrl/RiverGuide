@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import { shallow } from "enzyme";
 import FlowCard from "./FlowCard";
 
-it("renders flow card without crashing", async () => {
+it("renders the flow card without crashing", () => {
   const div = document.createElement("div");
   const el: any = shallow(<FlowCard />);
-  await ReactDOM.render(el, div);
+  ReactDOM.render(el, div);
   ReactDOM.unmountComponentAtNode(div);
 });
