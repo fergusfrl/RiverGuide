@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@amcharts/amcharts4": "^4.6.9",
     "@material-ui/core": "^4.4.2",
     "@material-ui/icons": "^4.4.1",
     "@material-ui/lab": "^4.0.0-alpha.27",
@@ -14,6 +15,7 @@
     "@types/react-redux": "^7.1.2",
     "axios": "^0.19.0",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-redux": "^7.1.1",
@@ -46,7 +48,10 @@
     ]
   },
   "devDependencies": {
+    "@types/enzyme": "^3.10.3",
+    "@types/redux-mock-store": "^1.0.1",
     "babel-eslint": "^10.0.3",
+    "enzyme": "^3.10.0",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "6.3.0",
@@ -54,6 +59,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "redux-mock-store": "^1.5.3"
   }
 }

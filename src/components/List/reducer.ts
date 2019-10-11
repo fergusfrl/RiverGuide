@@ -10,6 +10,7 @@ import {
 } from "./actionTypes";
 import { SEARCH_RIVERS } from "../ListHeader/actionTypes";
 import { FILTER_RIVERS } from "../FilterPanel/actionTypes";
+import {} from "../../utils";
 
 const initialState = {
   rivers: [],
@@ -17,7 +18,7 @@ const initialState = {
   error: false,
   searchStr: "",
   filters: {},
-  telemeteryData: [],
+  telemetryData: [],
   loadingTele: false,
   teleError: false
 };
@@ -52,9 +53,9 @@ const setFilters = (state: any, action: any) => ({
   filters: action.payload
 });
 
-const setTelemeteryData = (state: any, action: any) => ({
+const setTelemetryData = (state: any, action: any) => ({
   ...state,
-  telemeteryData: action.payload
+  telemetryData: action.payload
 });
 
 const isLoadingTele = (state: any) => ({
@@ -79,7 +80,7 @@ const actionMap: { [key: string]: any } = {
   [SET_ALL_RIVERS]: setAllRivers,
   [SEARCH_RIVERS]: setSearchStr,
   [FILTER_RIVERS]: setFilters,
-  [SET_TELE]: setTelemeteryData,
+  [SET_TELE]: setTelemetryData,
   [TELE_ERROR]: teleError,
   [LOADING_TELE]: isLoadingTele,
   [NOT_LOADING_TELE]: isNotLoadingTele

@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import uniq from "lodash/uniq";
 
+// actions
+import { setDetails } from "../Details/actions";
+
 // Material UI Components
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
@@ -12,13 +15,11 @@ import Chip from "@material-ui/core/Chip";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    nested: {
-      paddingLeft: theme.spacing(6)
-    }
+    nested: { paddingLeft: theme.spacing(6) }
   })
 );
 
-const ListSubRow = ({ rivers, flow }: any) => {
+const ListSubRow = ({ rivers, flow, setDetails }: any) => {
   const classes = useStyles();
   const riverSet = uniq(rivers.map((river: any) => river.river_name)).sort();
 
@@ -38,6 +39,7 @@ const ListSubRow = ({ rivers, flow }: any) => {
               return (
                 <ListItem
                   key={`${riverSection.section_name}-${index}`}
+                  onClick={() => setDetails(riverSection)}
                   dense
                   button
                   className={classes.nested}
@@ -61,7 +63,7 @@ const ListSubRow = ({ rivers, flow }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  flow: state.rivers.telemeteryData.map((tele: any) => {
+  flow: state.rivers.telemetryData.map((tele: any) => {
     const flow = tele.observables.find(
       (ob: any) => ob.type === "flow" && ob.units === "cumecs"
     );
@@ -74,5 +76,5 @@ const mapStateToProps = (state: any) => ({
 
 export default connect(
   mapStateToProps,
-  {}
+  { setDetails }
 )(ListSubRow);
