@@ -53,7 +53,7 @@ const Details = ({
   React.useEffect(() => {
     if (river.gauge_id) getRiverData();
     if (river.latitude && river.longitude) getForcast();
-  }, []);
+  }, [river.gauge_id, river.latitude, river.longitude]);
 
   const currentGauge =
     river.gauge_id &&
@@ -90,6 +90,7 @@ const Details = ({
           sunrise={moment.unix(weather.data.sunrise).format("h:MMa")}
           sunset={moment.unix(weather.data.sunset).format("h:MMa")}
           lastUpdated={moment.unix(weather.lastUpdated).format("ddd, h:MMa")}
+          isLoading={weather.loading}
         />
       )}
       <Typography

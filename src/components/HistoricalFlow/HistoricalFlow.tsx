@@ -19,6 +19,7 @@ const HistoricalFlow = ({ historicalFlow }: any) => {
   React.useEffect(() => {
     let chart = create("chartdiv", XYChart);
     chart.data = historicalFlow;
+    chart.responsive.enabled = true;
     let dateAxis = chart.xAxes.push(new DateAxis());
     dateAxis.baseInterval = {
       timeUnit: "hour",

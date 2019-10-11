@@ -67,7 +67,7 @@ export const getWeatherData = (lat: any, lon: any) => (
         type: SET_WEATHER,
         payload: {
           data: {
-            temp: res.data.main.temp,
+            temp: res.data.main.temp.toFixed(0),
             description: res.data.weather.description,
             sunrise: res.data.sys.sunrise,
             sunset: res.data.sys.sunset
