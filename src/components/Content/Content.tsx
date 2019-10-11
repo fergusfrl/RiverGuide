@@ -10,7 +10,9 @@ import { drawerWidth } from "../../constants";
 import { Details } from "../Details";
 
 // Material UI Components
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Slide from "@material-ui/core/Slide";
+import Dialog from "@material-ui/core/Dialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,8 +32,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const Transition: any = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const Content = ({ listOpen, detailsOpen }: any) => {
   const classes = useStyles();
+  const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
   return (
     <main
@@ -40,17 +47,23 @@ const Content = ({ listOpen, detailsOpen }: any) => {
       })}
     >
       {/* <Map /> */}
-      <Slide
-        direction="right"
-        in={detailsOpen}
-        timeout={400}
-        mountOnEnter
-        unmountOnExit
-      >
-        <div>
-          <Details />
-        </div>
-      </Slide>
+      {matches ? (
+        <Dialog fullScreen open={detailsOpen} TransitionComponent={Transition}>
+          <Details isDialog />
+        </Dialog>
+      ) : (
+        <Slide
+          direction="right"
+          in={detailsOpen}
+          timeout={400}
+          mountOnEnter
+          unmountOnExit
+        >
+          <div>
+            <Details isDialog={false} />
+          </div>
+        </Slide>
+      )}
     </main>
   );
 };

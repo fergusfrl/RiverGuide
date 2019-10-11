@@ -42,7 +42,8 @@ const Details = ({
   telemetryData,
   weather,
   getHistoricalRiverData,
-  getWeatherData
+  getWeatherData,
+  isDialog
 }: any) => {
   const classes = useStyles();
 
@@ -72,6 +73,7 @@ const Details = ({
         region={river.region}
         clearDetails={clearDetails}
         attr={attributes}
+        isDialog={isDialog}
       />
       {currentGauge && (
         <FlowCard
