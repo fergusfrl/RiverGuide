@@ -7,6 +7,7 @@ import isEmpty from "lodash/isEmpty";
 import { MapPin } from "../MapPin";
 
 // Material UI Components
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
@@ -20,21 +21,26 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const GlobalMap = ({ rivers, setDetails }: any) => {
+  const [popup, setPopup]: any = React.useState({});
   const [viewport, setViewport] = React.useState({
     latitude: -40.5,
     longitude: 172.186,
     zoom: 4.8
   });
-  const [popup, setPopup]: any = React.useState({});
+  const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
   const classes = useStyles();
 
   const handlePinClick = (marker: any) => {
-    setDetails(marker);
+    if (matches) {
+      setPopup(marker);
+    } else {
+      setDetails(marker);
+    }
   };
 
   const handlePinMouseOver = (marker: any) => {
-    setPopup(marker);
+    if (!matches) setPopup(marker);
   };
 
   const _onViewportChange = (viewport: any) => setViewport(viewport);
