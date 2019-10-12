@@ -1,35 +1,73 @@
 import React from "react";
-import MapGl, { Marker } from "react-map-gl";
+import MapGl, { Marker, Popup } from "react-map-gl";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import isEmpty from "lodash/isEmpty";
 
 // Components
 import { MapPin } from "../MapPin";
 
+// Material UI Components
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    map: {
-      //   marginTop: theme.spacing(5)
+    map: {},
+    popup: {
+      minWidth: "250px"
     }
   })
 );
 
-const GlobalMap = ({ rivers }: any) => {
+const GlobalMap = ({ rivers, setDetails }: any) => {
   const [viewport, setViewport] = React.useState({
     latitude: -40.5,
     longitude: 172.186,
     zoom: 4.8
   });
+  const [popup, setPopup]: any = React.useState({});
 
   const classes = useStyles();
 
-  const _onViewportChange = (viewport: any) => setViewport(viewport);
-
   const handlePinClick = (marker: any) => {
-    console.log(marker);
+    setDetails(marker);
   };
 
   const handlePinMouseOver = (marker: any) => {
-    console.log(marker);
+    setPopup(marker);
+  };
+
+  const _onViewportChange = (viewport: any) => setViewport(viewport);
+
+  const _renderPopup = () => {
+    return (
+      !isEmpty(popup) && (
+        <Popup
+          tipSize={5}
+          anchor="top"
+          longitude={popup.longitude}
+          latitude={popup.latitude}
+          closeOnClick={false}
+          onClose={() => setPopup({})}
+        >
+          <div className={classes.popup}>
+            <Typography variant="h6">{popup.section_name}</Typography>
+            <Typography
+              variant="subtitle1"
+              color="textSecondary"
+            >{`${popup.river_name}, ${popup.region}`}</Typography>
+            <Button
+              variant="text"
+              size="small"
+              color="primary"
+              onClick={(e: any) => handlePinClick(popup)}
+            >
+              See More
+            </Button>
+          </div>
+        </Popup>
+      )
+    );
   };
 
   return (
@@ -43,7 +81,7 @@ const GlobalMap = ({ rivers }: any) => {
     >
       {rivers.map((river: any) => (
         <Marker
-          key={`map-pin-${river.section_name}`}
+          key={`map-pin-${river.river_name}-${river.section_name}`}
           latitude={river.latitude}
           longitude={river.longitude}
         >
@@ -53,6 +91,7 @@ const GlobalMap = ({ rivers }: any) => {
           />
         </Marker>
       ))}
+      {_renderPopup()}
     </MapGl>
   );
 };

@@ -7,10 +7,13 @@ import debounce from "lodash/debounce";
 import { searchRivers } from "./actions";
 
 // Material UI Components
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import AppBar from "@material-ui/core/AppBar";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 // import Divider from "@material-ui/core/Divider";
 
 // Material UI Icons
@@ -29,7 +32,10 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "1.5em 1em 1.5em 1em",
       padding: "2px 4px",
       display: "flex",
-      alignItems: "center"
+      alignItems: "center",
+      [theme.breakpoints.down("xs")]: {
+        marginBottom: "0"
+      }
     },
     input: {
       marginLeft: theme.spacing(1),
@@ -45,9 +51,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ListHeader = ({ searchRivers, openFilter }: any) => {
+const ListHeader = ({ searchRivers, openFilter, setMapView }: any) => {
   const classes = useStyles();
   const [searchValue, setSearchValue] = React.useState("");
+  const [tabValue, setTabValue] = React.useState(0);
+  const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
   function searchList(event: any) {
     handleSearch(event.target.value);
@@ -62,6 +70,11 @@ const ListHeader = ({ searchRivers, openFilter }: any) => {
   function handleSearch(value: string) {
     setSearchValue(value);
     debounce(() => searchRivers(value), 300)();
+  }
+
+  function handleTab(event: any, value: number) {
+    setMapView(value === 1);
+    setTabValue(value);
   }
 
   return (
@@ -90,6 +103,18 @@ const ListHeader = ({ searchRivers, openFilter }: any) => {
           <FilterIcon />
         </IconButton> */}
       </Paper>
+      {matches && (
+        <Tabs
+          variant="fullWidth"
+          indicatorColor="secondary"
+          textColor="secondary"
+          value={tabValue}
+          onChange={handleTab}
+        >
+          <Tab label="List" value={0} />
+          <Tab label="Map" value={1} />
+        </Tabs>
+      )}
     </AppBar>
   );
 };

@@ -3,8 +3,14 @@ import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 
+// Utils
+import { applySearchValues } from "../../utils";
+
 // Constants
 import { drawerWidth } from "../../constants";
+
+// Actions
+import { setDetails } from "../Details/actions";
 
 // Components
 import { Details } from "../Details";
@@ -37,7 +43,7 @@ const Transition: any = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Content = ({ listOpen, detailsOpen, rivers }: any) => {
+const Content = ({ listOpen, detailsOpen, rivers, setDetails }: any) => {
   const classes = useStyles();
   const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
@@ -47,7 +53,9 @@ const Content = ({ listOpen, detailsOpen, rivers }: any) => {
         [classes.contentShift]: listOpen
       })}
     >
-      {!detailsOpen && <GlobalMap rivers={rivers} />}
+      {!detailsOpen && !matches && (
+        <GlobalMap rivers={rivers} setDetails={setDetails} />
+      )}
       {matches ? (
         <Dialog fullScreen open={detailsOpen} TransitionComponent={Transition}>
           <Details isDialog />
@@ -71,10 +79,10 @@ const Content = ({ listOpen, detailsOpen, rivers }: any) => {
 
 const mapStateToProps = (state: any) => ({
   detailsOpen: state.details.isSelected,
-  rivers: state.rivers.rivers
+  rivers: state.rivers.rivers.filter(applySearchValues(state.rivers.searchStr))
 });
 
 export default connect(
   mapStateToProps,
-  {}
+  { setDetails }
 )(Content);
