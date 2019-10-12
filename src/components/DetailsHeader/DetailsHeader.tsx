@@ -52,7 +52,7 @@ const DetailsHeader = ({
         className={clsx(classes.appBar, !isDialog && classes.contentAppBar)}
       >
         <Grid container justify="space-between">
-          <Grid item>
+          <Grid item xs={10}>
             <Typography variant="h4" color="primary">
               {title}
             </Typography>

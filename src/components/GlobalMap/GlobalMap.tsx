@@ -31,11 +31,15 @@ const GlobalMap = ({ rivers, setDetails }: any) => {
 
   const classes = useStyles();
 
+  const openDetails = (marker: any) => {
+    setDetails(marker);
+  };
+
   const handlePinClick = (marker: any) => {
     if (matches) {
       setPopup(marker);
     } else {
-      setDetails(marker);
+      openDetails(marker);
     }
   };
 
@@ -66,7 +70,7 @@ const GlobalMap = ({ rivers, setDetails }: any) => {
               variant="text"
               size="small"
               color="primary"
-              onClick={(e: any) => handlePinClick(popup)}
+              onClick={(e: any) => openDetails(popup)}
             >
               See More
             </Button>
