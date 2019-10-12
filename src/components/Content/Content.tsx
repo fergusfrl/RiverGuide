@@ -8,6 +8,7 @@ import { drawerWidth } from "../../constants";
 
 // Components
 import { Details } from "../Details";
+import { GlobalMap } from "../GlobalMap";
 
 // Material UI Components
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -36,7 +37,7 @@ const Transition: any = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Content = ({ listOpen, detailsOpen }: any) => {
+const Content = ({ listOpen, detailsOpen, rivers }: any) => {
   const classes = useStyles();
   const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
@@ -46,7 +47,7 @@ const Content = ({ listOpen, detailsOpen }: any) => {
         [classes.contentShift]: listOpen
       })}
     >
-      {/* <Map /> */}
+      {!detailsOpen && <GlobalMap rivers={rivers} />}
       {matches ? (
         <Dialog fullScreen open={detailsOpen} TransitionComponent={Transition}>
           <Details isDialog />
@@ -69,7 +70,8 @@ const Content = ({ listOpen, detailsOpen }: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-  detailsOpen: state.details.isSelected
+  detailsOpen: state.details.isSelected,
+  rivers: state.rivers.rivers
 });
 
 export default connect(

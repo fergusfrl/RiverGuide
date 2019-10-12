@@ -54,6 +54,7 @@ const Details = ({
   React.useEffect(() => {
     if (river.gauge_id) getRiverData();
     if (river.latitude && river.longitude) getForcast();
+    // eslint-disable-next-line
   }, [river.gauge_id, river.latitude, river.longitude]);
 
   const currentGauge =
