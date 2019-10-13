@@ -8,6 +8,7 @@ import { applySearchValues, applyFilterValues } from "../../utils";
 
 // Actions
 import { getRiverList, getTelemetryData } from "./actions";
+import { setDetails } from "../Details/actions";
 
 // Constants
 import { drawerWidth } from "../../constants";
@@ -15,8 +16,10 @@ import { drawerWidth } from "../../constants";
 // Components
 import { ListHeader } from "../ListHeader";
 import { ListRow } from "../ListRow";
+import { GlobalMap } from "../GlobalMap";
 
 // Material UI Components
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Drawer from "@material-ui/core/Drawer";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
@@ -56,9 +59,13 @@ const List = ({
   hasError,
   getRiverList,
   getTelemetryData,
-  openFilter
+  openFilter,
+  setDetails
 }: any) => {
   const classes = useStyles();
+  const [isMapView, setIsMapView] = React.useState(false);
+
+  const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
   React.useEffect(() => {
     getRiverList();
@@ -75,25 +82,29 @@ const List = ({
         paper: classes.drawerPaper
       }}
     >
-      <ListHeader openFilter={openFilter} />
+      <ListHeader openFilter={openFilter} setMapView={setIsMapView} />
       {hasError && (
         <Typography className={classes.error}>
           Something went wrong. Please Reload and try again.
         </Typography>
       )}
       {isLoading && <CircularProgress className={classes.progress} />}
-      {regions.map((region: any) => {
-        const regionRivers = rivers.filter(
-          (river: any) => river.region === region
-        );
-        return (
-          <ListRow
-            key={`list-row-${region}`}
-            region={region}
-            rivers={regionRivers}
-          />
-        );
-      })}
+      {!matches || !isMapView ? (
+        regions.map((region: any) => {
+          const regionRivers = rivers.filter(
+            (river: any) => river.region === region
+          );
+          return (
+            <ListRow
+              key={`list-row-${region}`}
+              region={region}
+              rivers={regionRivers}
+            />
+          );
+        })
+      ) : (
+        <GlobalMap rivers={rivers} setDetails={setDetails} />
+      )}
     </Drawer>
   );
 };
@@ -122,5 +133,5 @@ const mapStateToProps = (state: any) => ({
 
 export default connect(
   mapStateToProps,
-  { getRiverList, getTelemetryData }
+  { getRiverList, getTelemetryData, setDetails }
 )(List);

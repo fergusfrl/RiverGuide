@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import clsx from "clsx";
 
 // Component UI Components
 import AppBar from "@material-ui/core/AppBar";
@@ -18,10 +19,13 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: "#fafafa",
       padding: theme.spacing(0, 3, 3, 3)
     },
-    contentAppBar: {
+    appBar: {
       backgroundColor: "#fafafa",
-      padding: theme.spacing(11, 0, 1, 0),
+      padding: theme.spacing(2, 0, 1, 0),
       boxShadow: "none"
+    },
+    contentAppBar: {
+      paddingTop: theme.spacing(11)
     },
     attributeChip: {
       margin: theme.spacing(1, 1, 0, 0)
@@ -37,14 +41,18 @@ const DetailsHeader = ({
   river_name,
   region,
   clearDetails,
-  attr
+  attr,
+  isDialog
 }: any) => {
   const classes = useStyles();
   return (
     <>
-      <AppBar position="sticky" className={classes.contentAppBar}>
+      <AppBar
+        position="sticky"
+        className={clsx(classes.appBar, !isDialog && classes.contentAppBar)}
+      >
         <Grid container justify="space-between">
-          <Grid item>
+          <Grid item xs={10}>
             <Typography variant="h4" color="primary">
               {title}
             </Typography>

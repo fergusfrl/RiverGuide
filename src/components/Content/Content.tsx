@@ -3,14 +3,23 @@ import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 
+// Utils
+import { applySearchValues } from "../../utils";
+
 // Constants
 import { drawerWidth } from "../../constants";
 
+// Actions
+import { setDetails } from "../Details/actions";
+
 // Components
 import { Details } from "../Details";
+import { GlobalMap } from "../GlobalMap";
 
 // Material UI Components
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Slide from "@material-ui/core/Slide";
+import Dialog from "@material-ui/core/Dialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,8 +39,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Content = ({ listOpen, detailsOpen }: any) => {
+const Transition: any = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const Content = ({ listOpen, detailsOpen, rivers, setDetails }: any) => {
   const classes = useStyles();
+  const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
   return (
     <main
@@ -39,27 +53,36 @@ const Content = ({ listOpen, detailsOpen }: any) => {
         [classes.contentShift]: listOpen
       })}
     >
-      {/* <Map /> */}
-      <Slide
-        direction="right"
-        in={detailsOpen}
-        timeout={400}
-        mountOnEnter
-        unmountOnExit
-      >
-        <div>
-          <Details />
-        </div>
-      </Slide>
+      {!detailsOpen && !matches && (
+        <GlobalMap rivers={rivers} setDetails={setDetails} />
+      )}
+      {matches ? (
+        <Dialog fullScreen open={detailsOpen} TransitionComponent={Transition}>
+          <Details isDialog />
+        </Dialog>
+      ) : (
+        <Slide
+          direction="right"
+          in={detailsOpen}
+          timeout={400}
+          mountOnEnter
+          unmountOnExit
+        >
+          <div>
+            <Details isDialog={false} />
+          </div>
+        </Slide>
+      )}
     </main>
   );
 };
 
 const mapStateToProps = (state: any) => ({
-  detailsOpen: state.details.isSelected
+  detailsOpen: state.details.isSelected,
+  rivers: state.rivers.rivers.filter(applySearchValues(state.rivers.searchStr))
 });
 
 export default connect(
   mapStateToProps,
-  {}
+  { setDetails }
 )(Content);

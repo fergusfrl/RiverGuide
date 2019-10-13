@@ -25,7 +25,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const FlowCard = ({ currentFlow, unit, name, source, lastUpdated }: any) => {
+const FlowCard = ({
+  currentFlow,
+  unit,
+  name,
+  source,
+  lastUpdated,
+  isLoading
+}: any) => {
   const classes = useStyles();
   const [expand, setExpand] = React.useState(false);
 
@@ -33,43 +40,51 @@ const FlowCard = ({ currentFlow, unit, name, source, lastUpdated }: any) => {
     setExpand(prev => !prev);
   }
 
+  function renderContent() {
+    return (
+      <>
+        <CardContent>
+          <Grid container justify="flex-start" spacing={1}>
+            <Grid item>
+              <Typography className={classes.value} variant="h4">
+                {currentFlow}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography className={classes.value} variant="h6">
+                {unit}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid container justify="space-between">
+            <Grid item>
+              <Typography color="textSecondary">{`${name}, ${source}`}</Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="caption" color="textSecondary">
+                Last Updated: {lastUpdated}
+              </Typography>
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Collapse in={expand}>
+          <CardContent>
+            <HistoricalFlow />
+          </CardContent>
+        </Collapse>
+        <Divider />
+        <CardActions>
+          <Button size="small" color="primary" onClick={toggleExpand}>
+            {expand ? "Collapse" : "Expand"}
+          </Button>
+        </CardActions>
+      </>
+    );
+  }
+
   return (
     <Card className={classes.card}>
-      <CardContent>
-        <Grid container justify="flex-start" spacing={1}>
-          <Grid item>
-            <Typography className={classes.value} variant="h4">
-              {currentFlow}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography className={classes.value} variant="h6">
-              {unit}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container justify="space-between">
-          <Grid item>
-            <Typography color="textSecondary">{`${name}, ${source}`}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography variant="caption" color="textSecondary">
-              Last Updated: {lastUpdated}
-            </Typography>
-          </Grid>
-        </Grid>
-      </CardContent>
-      <Collapse in={expand}>
-        <CardContent>
-          <HistoricalFlow />
-        </CardContent>
-      </Collapse>
-      <Divider />
-      <CardActions>
-        <Button size="small" color="primary" onClick={toggleExpand}>
-          {expand ? "Collapse" : "Expand"}
-        </Button>
-      </CardActions>
+      {isLoading ? <CardContent>loading</CardContent> : renderContent()}
     </Card>
   );
 };
