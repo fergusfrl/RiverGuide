@@ -1,27 +1,41 @@
 import React from "react";
-import MapGl, { Marker, Popup } from "react-map-gl";
+import MapGl, { Marker, NavigationControl } from "react-map-gl";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import clsx from "clsx";
 import isEmpty from "lodash/isEmpty";
 
 // Components
 import { MapPin } from "../MapPin";
+import { GlobalMapPopup } from "../GlobalMapPopup";
 
 // Material UI Components
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     map: {},
-    popup: {
-      minWidth: "250px"
+    navControl: {
+      position: "absolute",
+      bottom: theme.spacing(8),
+      right: theme.spacing(2)
+    },
+    styleControl: {
+      position: "absolute",
+      bottom: theme.spacing(3),
+      right: theme.spacing(1)
+    },
+    checkedLabel: {
+      color: "white"
     }
   })
 );
 
 const GlobalMap = ({ rivers, setDetails }: any) => {
   const [popup, setPopup]: any = React.useState({});
+  const [isChecked, setIsChecked] = React.useState(false);
   const [viewport, setViewport] = React.useState({
     latitude: -40.5,
     longitude: 172.186,
@@ -30,6 +44,10 @@ const GlobalMap = ({ rivers, setDetails }: any) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
   const classes = useStyles();
+
+  const toggleMapStyle = () => {
+    setIsChecked(prev => !prev);
+  };
 
   const openDetails = (marker: any) => {
     setDetails(marker);
@@ -52,30 +70,11 @@ const GlobalMap = ({ rivers, setDetails }: any) => {
   const _renderPopup = () => {
     return (
       !isEmpty(popup) && (
-        <Popup
-          tipSize={5}
-          anchor="top"
-          longitude={popup.longitude}
-          latitude={popup.latitude}
-          closeOnClick={false}
-          onClose={() => setPopup({})}
-        >
-          <div className={classes.popup}>
-            <Typography variant="h6">{popup.section_name}</Typography>
-            <Typography
-              variant="subtitle1"
-              color="textSecondary"
-            >{`${popup.river_name}, ${popup.region}`}</Typography>
-            <Button
-              variant="text"
-              size="small"
-              color="primary"
-              onClick={(e: any) => openDetails(popup)}
-            >
-              See More
-            </Button>
-          </div>
-        </Popup>
+        <GlobalMapPopup
+          river={popup}
+          setPopup={setPopup}
+          openDetails={openDetails}
+        />
       )
     );
   };
@@ -83,6 +82,11 @@ const GlobalMap = ({ rivers, setDetails }: any) => {
   return (
     <MapGl
       className={classes.map}
+      mapStyle={
+        isChecked
+          ? "mapbox://styles/mapbox/satellite-v9"
+          : "mapbox://styles/mapbox/streets-v11"
+      }
       {...viewport}
       width="100%"
       height="100vh"
@@ -102,6 +106,25 @@ const GlobalMap = ({ rivers, setDetails }: any) => {
         </Marker>
       ))}
       {_renderPopup()}
+      <div className={classes.navControl}>
+        <NavigationControl />
+      </div>
+      <div className={classes.styleControl}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isChecked}
+              onChange={toggleMapStyle}
+              color="primary"
+            />
+          }
+          label={
+            <Typography className={clsx(isChecked && classes.checkedLabel)}>
+              Satellite
+            </Typography>
+          }
+        />
+      </div>
     </MapGl>
   );
 };

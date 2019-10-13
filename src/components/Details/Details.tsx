@@ -18,6 +18,7 @@ import {
 import { DetailsHeader } from "../DetailsHeader";
 import { FlowCard } from "../FlowCard";
 import { WeatherCard } from "../WeatherCard";
+import { LocalMap } from "../LocalMap";
 
 // Material UI Components
 import Typography from "@material-ui/core/Typography";
@@ -101,6 +102,13 @@ const Details = ({
         color="textPrimary"
         dangerouslySetInnerHTML={{ __html: river.description }}
       />
+      {river.latitude && river.longitude && (
+        <LocalMap
+          latitude={river.latitude}
+          longitude={river.longitude}
+          markers={river.marker_list}
+        />
+      )}
       <Typography color="textSecondary">
         Last updated on {moment(river.updatedAt).format("DD/MM/YY, h:MMa")}
       </Typography>
