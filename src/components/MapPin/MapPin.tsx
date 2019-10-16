@@ -15,10 +15,7 @@ const MapPin = ({ size = 20, onClick, onMouseOver }: any) => {
     <svg
       height={size}
       viewBox="0 0 24 24"
-      style={{
-        ...pinStyle,
-        transform: `translate(${-size / 2}px,${-size}px)`
-      }}
+      style={{ ...pinStyle }}
       onClick={onClick}
       onMouseOver={onMouseOver}
     >

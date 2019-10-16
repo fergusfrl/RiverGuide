@@ -54,7 +54,7 @@ const Content = ({ listOpen, detailsOpen, rivers, setDetails }: any) => {
       })}
     >
       {!detailsOpen && !matches && (
-        <GlobalMap rivers={rivers} setDetails={setDetails} />
+        <GlobalMap rivers={rivers} openDetails={setDetails} />
       )}
       {matches ? (
         <Dialog fullScreen open={detailsOpen} TransitionComponent={Transition}>
