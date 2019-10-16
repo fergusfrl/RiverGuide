@@ -1,12 +1,12 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Popup } from "react-map-gl";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 // Material UI Components
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     popup: {
       minWidth: "250px"
@@ -14,17 +14,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const GlobalMapPopup = ({ river, setPopup, openDetails }: any) => {
+const GlobalMapPopup = ({ river, closePopup, openDetails }: any) => {
   const classes = useStyles();
   return (
-    <Popup
-      tipSize={5}
-      anchor="top"
-      latitude={river.latitude}
-      longitude={river.longitude}
-      closeOnClick={false}
-      onClose={() => setPopup({})}
-    >
+    <ClickAwayListener onClickAway={closePopup}>
       <div className={classes.popup}>
         <Typography variant="h6">{river.section_name}</Typography>
         <Typography
@@ -40,7 +33,7 @@ const GlobalMapPopup = ({ river, setPopup, openDetails }: any) => {
           See More
         </Button>
       </div>
-    </Popup>
+    </ClickAwayListener>
   );
 };
 

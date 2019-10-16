@@ -4,6 +4,7 @@ import { Popup } from "react-map-gl";
 // Material UI Components
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 const LocalMapPopup = ({
   longitude,
@@ -25,7 +26,7 @@ const LocalMapPopup = ({
           {category}
         </Typography>
         <Typography variant="h5">{name}</Typography>
-        <Grid container spacing={1}>
+        <Grid container direction="column" spacing={1}>
           <Grid item>
             <Typography
               paragraph
@@ -37,6 +38,15 @@ const LocalMapPopup = ({
               paragraph
               color="textSecondary"
             >{`lon: ${longitude}`}</Typography>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="text"
+              href={`https://maps.google.com/?q=${latitude},${longitude}`}
+              target="_blank"
+            >
+              Google Maps
+            </Button>
           </Grid>
         </Grid>
       </>
