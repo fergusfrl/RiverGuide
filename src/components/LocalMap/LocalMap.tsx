@@ -97,7 +97,16 @@ const LocalMap = ({ latitude, longitude, markers }: any) => {
         >
           {isEmpty(markers) ? (
             <Marker latitude={latitude} longitude={longitude}>
-              <MapPin />
+              <MapPin
+                onClick={() =>
+                  handlePinClick({
+                    lat: latitude,
+                    lng: longitude,
+                    category: "Put In",
+                    name: ""
+                  })
+                }
+              />
             </Marker>
           ) : (
             markers.map((marker: any) => (
