@@ -9,9 +9,6 @@ import { applySearchValues } from "../../utils";
 // Constants
 import { drawerWidth } from "../../constants";
 
-// Actions
-import { setDetails } from "../Details/actions";
-
 // Components
 import { Details } from "../Details";
 import { GlobalMap } from "../GlobalMap";
@@ -43,7 +40,7 @@ const Transition: any = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Content = ({ listOpen, detailsOpen, rivers, setDetails }: any) => {
+const Content = ({ listOpen, detailsOpen, rivers }: any) => {
   const classes = useStyles();
   const matches = useMediaQuery((theme: any) => theme.breakpoints.down("xs"));
 
@@ -53,9 +50,7 @@ const Content = ({ listOpen, detailsOpen, rivers, setDetails }: any) => {
         [classes.contentShift]: listOpen
       })}
     >
-      {!detailsOpen && !matches && (
-        <GlobalMap rivers={rivers} openDetails={setDetails} />
-      )}
+      {!detailsOpen && !matches && <GlobalMap rivers={rivers} />}
       {matches ? (
         <Dialog fullScreen open={detailsOpen} TransitionComponent={Transition}>
           <Details isDialog />
@@ -84,5 +79,5 @@ const mapStateToProps = (state: any) => ({
 
 export default connect(
   mapStateToProps,
-  { setDetails }
+  {}
 )(Content);
