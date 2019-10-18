@@ -1,12 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-
-// utils
-import { reduceFilterValues } from "../../utils";
+import uniq from "lodash/uniq";
 
 // Components
-// import { FilterItem } from "../FilterItem";
+import { FilterItem } from "../FilterItem";
 
 // Constants
 import { drawerWidth } from "../../constants";
@@ -54,7 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const FilterPanel = ({ open, closeFilter, grades, clearFilters }: any) => {
+const FilterPanel = ({
+  open,
+  closeFilter,
+  filterValues,
+  clearFilters
+}: any) => {
   const classes = useStyles();
 
   return (
@@ -78,7 +81,13 @@ const FilterPanel = ({ open, closeFilter, grades, clearFilters }: any) => {
           </IconButton>
         </Grid>
       </Grid>
-      {/* <FilterItem values={grades} name="Grades" /> */}
+      {Object.keys(filterValues).map((key: any, index: Number) => (
+        <FilterItem
+          key={`filter-item-${index}`}
+          name={key}
+          values={filterValues[key]}
+        />
+      ))}
       <Grid container justify="flex-end" className={classes.buttons}>
         <Grid item>
           <Button onClick={closeFilter} className={classes.filterButton}>
@@ -103,7 +112,16 @@ const FilterPanel = ({ open, closeFilter, grades, clearFilters }: any) => {
 const mapStateToProps = (state: any) => ({
   filterValues: state.rivers.rivers
     .map((river: any) => river.key_facts_char)
-    .reduce(reduceFilterValues, {})
+    .reduce((acc: any, curr: any) => {
+      Object.keys(curr).forEach((key: string) => {
+        if (key in acc) {
+          acc[key] = uniq([...acc[key], curr[key]]);
+        } else {
+          acc[key] = [curr[key]];
+        }
+      });
+      return acc;
+    }, {})
 });
 
 export default connect(

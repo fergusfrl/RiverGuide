@@ -68,9 +68,10 @@ export const getWeatherData = (lat: any, lon: any) => (
         payload: {
           data: {
             temp: res.data.main.temp.toFixed(0),
-            description: res.data.weather.description,
+            description: res.data.weather[0].description,
             sunrise: res.data.sys.sunrise,
-            sunset: res.data.sys.sunset
+            sunset: res.data.sys.sunset,
+            iconCode: res.data.weather[0].icon
           },
           lastUpdated: res.data.dt
         }

@@ -94,6 +94,7 @@ const Details = ({
           sunrise={moment.unix(weather.data.sunrise).format("h:MMa")}
           sunset={moment.unix(weather.data.sunset).format("h:MMa")}
           lastUpdated={moment.unix(weather.lastUpdated).format("ddd, h:MMa")}
+          iconCode={weather.data.iconCode}
           isLoading={weather.loading}
         />
       )}

@@ -1,7 +1,6 @@
 import isEmpty from "lodash/isEmpty";
 import size from "lodash/size";
 import keys from "lodash/keys";
-import uniq from "lodash/uniq";
 import isObject from "lodash/isObject";
 import isArray from "lodash/isArray";
 
@@ -28,18 +27,6 @@ export const applyFilterValues = (filters: any) => (river: any) => {
       )
       .filter((val: boolean) => val)
   );
-};
-
-export const reduceFilterValues = () => (acc: any, curr: any) => {
-  keys(curr).forEach((key: string) => {
-    if (key in acc) {
-      acc[key] = uniq([...acc[key], curr[key]]);
-    } else {
-      acc[key] = [curr[key]];
-    }
-  });
-  console.log(acc);
-  return acc;
 };
 
 export const mapAttributes = () => (value: any, key: string) => ({

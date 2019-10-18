@@ -23,7 +23,8 @@ const initialState = {
       temp: "",
       desription: "",
       sunrise: "",
-      sunset: ""
+      sunset: "",
+      iconCode: ""
     },
     lastUpdated: "",
     loading: false,
