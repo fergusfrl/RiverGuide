@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import ReactMapboxGl, {
   Cluster,
   Marker,
@@ -7,6 +8,9 @@ import ReactMapboxGl, {
 } from "react-mapbox-gl";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
+
+// Actions
+import { setCenter, setZoom } from "./actions";
 
 // Components
 import { MapPin } from "../MapPin";
@@ -72,10 +76,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const GlobalMap = ({ rivers }: any) => {
+const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
   const classes = useStyles();
-  const [zoom, setZoom] = React.useState(5);
-  const [center, setCenter]: any = React.useState([172.186, -40.5]);
+  // const [zoom, setZoom] = React.useState(5);
+  // const [center, setCenter]: any = React.useState([172.186, -40.5]);
   const [isChecked, setIsChecked] = React.useState(false);
   const [popup, setPopup]: any = React.useState({
     open: false,
@@ -194,4 +198,12 @@ const GlobalMap = ({ rivers }: any) => {
   );
 };
 
-export default GlobalMap;
+const mapStateToProps = (state: any) => ({
+  zoom: state.map.zoom,
+  center: state.map.center
+});
+
+export default connect(
+  mapStateToProps,
+  { setZoom, setCenter }
+)(GlobalMap);
