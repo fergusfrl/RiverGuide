@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 // Maertial UI Icons
 import MenuIcon from "@material-ui/icons/Menu";
 
-import Logo from "../..//logo.png";
+import Logo from "../../img/logo.png";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

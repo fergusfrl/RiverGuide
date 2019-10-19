@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const GlobalMap = ({ rivers, openDetails }: any) => {
+const GlobalMap = ({ rivers }: any) => {
   const classes = useStyles();
   const [zoom, setZoom] = React.useState(5);
   const [center, setCenter]: any = React.useState([172.186, -40.5]);
@@ -114,7 +114,6 @@ const GlobalMap = ({ rivers, openDetails }: any) => {
     >
       <>
         <MapPin />
-        {/* TODO: pass grade into MpaPin */}
         <Typography
           noWrap
           className={clsx(classes.mapSectionName, {
@@ -168,11 +167,7 @@ const GlobalMap = ({ rivers, openDetails }: any) => {
       </Cluster>
       {popup.open && (
         <Popup coordinates={[popup.river.longitude, popup.river.latitude]}>
-          <GlobalMapPopup
-            closePopup={handlePopupClose}
-            river={popup.river}
-            openDetails={openDetails}
-          />
+          <GlobalMapPopup closePopup={handlePopupClose} river={popup.river} />
         </Popup>
       )}
       <FormControlLabel

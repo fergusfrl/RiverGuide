@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
 
-// reducers
 import { ListReducer } from "./components/List";
 import { DetailsReducer } from "./components/Details";
+import { FiltersReducer } from "./components/FilterPanel";
 
 export default combineReducers({
   rivers: ListReducer,
-  details: DetailsReducer
+  details: DetailsReducer,
+  filters: FiltersReducer
 });

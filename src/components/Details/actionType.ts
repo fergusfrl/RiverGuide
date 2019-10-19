@@ -8,3 +8,4 @@ export const WEATHER_LOADING: string = "WEATHER_LOADING";
 export const NOT_WEATHER_LOADING: string = "NOT_WEATHER_LOADING";
 export const SET_WEATHER: string = "SET_WEATHER";
 export const WEATHER_ERROR: string = "WEATHER_ERROR";
+export const SET_FORCAST: string = "SET_FORCAST";
