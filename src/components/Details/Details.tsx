@@ -42,6 +42,7 @@ const Details = ({
   clearDetails,
   telemetryData,
   weather,
+  weatherForcast,
   getHistoricalRiverData,
   getWeatherData,
   isDialog
@@ -93,8 +94,10 @@ const Details = ({
           currentTemp={weather.data.temp}
           sunrise={moment.unix(weather.data.sunrise).format("h:MMa")}
           sunset={moment.unix(weather.data.sunset).format("h:MMa")}
+          description={weather.data.description}
           lastUpdated={moment.unix(weather.lastUpdated).format("ddd, h:MMa")}
           iconCode={weather.data.iconCode}
+          weatherForcast={weatherForcast}
           isLoading={weather.loading}
         />
       )}
@@ -120,7 +123,8 @@ const Details = ({
 const mapStateToProps = (state: any) => ({
   river: state.details.river,
   telemetryData: state.rivers.telemetryData,
-  weather: state.details.weather
+  weather: state.details.weather,
+  weatherForcast: state.details.weatherForcast
 });
 
 export default connect(

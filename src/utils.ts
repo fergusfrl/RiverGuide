@@ -46,3 +46,6 @@ export const mapAttributeValues = () => (item: any) => {
   }
   return item;
 };
+
+export const fahrenheitToCelcius = (fahrenheit: number) =>
+  ((fahrenheit - 32) * (5 / 9)).toFixed(0);

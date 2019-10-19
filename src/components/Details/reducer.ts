@@ -8,7 +8,8 @@ import {
   WEATHER_ERROR,
   WEATHER_LOADING,
   NOT_WEATHER_LOADING,
-  SET_WEATHER
+  SET_WEATHER,
+  SET_FORCAST
 } from "./actionType";
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   historicalFlowError: false,
   historicalFlow: [],
   lastUpdatedHistroicalFlow: "",
+  weatherForcast: [],
   weather: {
     data: {
       temp: "",
@@ -97,6 +99,11 @@ const setWeather = (state: any, action: any) => ({
   }
 });
 
+const setWeatherForcast = (state: any, action: any) => ({
+  ...state,
+  weatherForcast: action.payload
+});
+
 const actionMap: { [key: string]: any } = {
   [SET_DETAILS]: setRiver,
   [CLEAR_DETAILS]: clearDetails,
@@ -107,7 +114,8 @@ const actionMap: { [key: string]: any } = {
   [WEATHER_ERROR]: weatherError,
   [SET_WEATHER]: setWeather,
   [WEATHER_LOADING]: isWeatherLoading,
-  [NOT_WEATHER_LOADING]: isNotWeatherLoading
+  [NOT_WEATHER_LOADING]: isNotWeatherLoading,
+  [SET_FORCAST]: setWeatherForcast
 };
 
 export default function(state = initialState, action: any) {

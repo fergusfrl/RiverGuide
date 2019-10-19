@@ -1,6 +1,9 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
+// Components
+import { WeatherForcast } from "../WeatherForcast";
+
 // Icons
 import { ReactComponent as CloudyIcon } from "../../img/weather/cloudy.svg";
 import { ReactComponent as FogIcon } from "../../img/weather/fog.svg";
@@ -8,8 +11,6 @@ import { ReactComponent as PartlyCloudyIcon } from "../../img/weather/partlyClou
 import { ReactComponent as RainIcon } from "../../img/weather/rain.svg";
 import { ReactComponent as SunIcon } from "../../img/weather/sun.svg";
 import { ReactComponent as SnowIcon } from "../../img/weather/snow.svg";
-import { ReactComponent as SunriseIcon } from "../../img/weather/sunrise.svg";
-import { ReactComponent as SunsetIcon } from "../../img/weather/sunset.svg";
 
 // Material UI Components
 import Card from "@material-ui/core/Card";
@@ -46,10 +47,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const WeatherCard = ({
   currentTemp,
+  description,
   sunrise,
   sunset,
   lastUpdated,
   iconCode,
+  weatherForcast,
   isLoading
 }: any) => {
   const classes = useStyles();
@@ -106,24 +109,7 @@ const WeatherCard = ({
             renderWeather()
           )}
           <Grid item>
-            <Grid container spacing={1}>
-              <Grid item>
-                <SunriseIcon className={classes.smallIcon} />
-              </Grid>
-              <Grid item>
-                <Typography color="textSecondary">{`Sunrise ${sunrise}`}</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container spacing={1}>
-              <Grid item>
-                <SunsetIcon className={classes.smallIcon} />
-              </Grid>
-              <Grid item>
-                <Typography color="textSecondary">{`Sunset ${sunset}`}</Typography>
-              </Grid>
-            </Grid>
+            <Typography color="textSecondary">{description}</Typography>
           </Grid>
           <Grid item>
             <Typography variant="caption" color="textSecondary">
@@ -133,7 +119,9 @@ const WeatherCard = ({
         </Grid>
       </CardContent>
       <Collapse in={expand}>
-        <CardContent>Weather forcast coming soon</CardContent>
+        <CardContent>
+          <WeatherForcast weatherForcast={weatherForcast} />
+        </CardContent>
       </Collapse>
       <Divider />
       <CardActions>

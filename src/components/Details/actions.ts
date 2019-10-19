@@ -10,8 +10,10 @@ import {
   WEATHER_ERROR,
   WEATHER_LOADING,
   NOT_WEATHER_LOADING,
-  SET_WEATHER
+  SET_WEATHER,
+  SET_FORCAST
 } from "./actionType";
+import { fahrenheitToCelcius } from "../../utils";
 
 export const setDetails = (river: any) => (
   dispatch: ThunkDispatch<{}, {}, any>
@@ -58,6 +60,8 @@ export const getWeatherData = (lat: any, lon: any) => (
   dispatch: ThunkDispatch<{}, {}, any>
 ) => {
   dispatch({ type: WEATHER_LOADING });
+
+  // Get current weather
   axios
     .get(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=en&mode=json&APPID=521cea2fce8675d0fe0678216dc01d5c`
@@ -84,4 +88,27 @@ export const getWeatherData = (lat: any, lon: any) => (
     .finally(() => {
       dispatch({ type: NOT_WEATHER_LOADING });
     });
+
+  // Get forcast weather
+  axios
+    .get(
+      `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/52f217f1efd90551483180fc9203dc56/${lat},${lon}`
+    )
+    .then(res => {
+      dispatch({
+        type: SET_FORCAST,
+        payload: res.data.daily.data
+          .filter((_: any, index: number) => index >= 1 && index <= 5)
+          .map(({ temperatureHigh, temperatureLow, icon, time }: any) => ({
+            temperatureHigh: fahrenheitToCelcius(temperatureHigh),
+            temperatureLow: fahrenheitToCelcius(temperatureLow),
+            icon,
+            time
+          }))
+      });
+    })
+    .catch(err => {
+      console.log("Something went wrong loading weather forcast", err);
+    })
+    .finally(() => {});
 };
