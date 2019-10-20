@@ -62,8 +62,8 @@ const FilterItem = ({ name, values }: any) => {
       </Grid>
 
       <div className={classes.chipContainer}>
-        {values.map((value: string) => (
-          <FilterChip key={`filter-chip-${value}`} value={`Class ${value}`} />
+        {values.map((value: string, index: number) => (
+          <FilterChip key={`filter-chip-${index}`} value={`Class ${value}`} />
         ))}
         <Button className={classes.clearButton} size="small" color="primary">
           Clear

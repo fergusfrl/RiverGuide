@@ -71,8 +71,8 @@ const WeatherForcast = ({ weatherForcast }: any) => {
       spacing={1}
       justify="space-between"
     >
-      {weatherForcast.map((day: any) => (
-        <Grid item>
+      {weatherForcast.map((day: any, index: number) => (
+        <Grid item key={`weather-forcast-${index}`}>
           <WeatherItem
             dayOfTheWeek={moment.unix(day.time).format("dddd")}
             high={day.temperatureHigh}
