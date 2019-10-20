@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 // Material UI Components
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -11,12 +11,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 // Material UI Icons
 import DirectionsIcon from "@material-ui/icons/Directions";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     popup: {
-      minWidth: "250px"
-    },
-    latlng: {}
+      minWidth: "150px"
+    }
   })
 );
 

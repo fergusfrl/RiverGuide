@@ -22,7 +22,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     count: {
       textAlign: "right",
-      marginRight: "-2em"
+      paddingLeft: "2em"
     }
   })
 );
