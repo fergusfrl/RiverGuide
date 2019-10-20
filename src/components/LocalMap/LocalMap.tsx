@@ -1,6 +1,6 @@
 import React from "react";
-import MapGl, { Marker, NavigationControl } from "react-map-gl";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import ReactMapboxGl, { Marker, Popup, ZoomControl } from "react-mapbox-gl";
 import clsx from "clsx";
 import isEmpty from "lodash/isEmpty";
 
@@ -15,131 +15,179 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 
+const Map = ReactMapboxGl({
+  accessToken:
+    "pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww"
+});
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
       margin: theme.spacing(2, 1)
     },
-    navControl: {
+    mapLabel: {
       position: "absolute",
-      top: "1em",
-      right: "1em"
+      margin: "-32px 0 0 25px",
+      maxWidth: 300,
+      fontWeight: "bold",
+      WebkitTextStroke: "1px white"
     },
-    styleControl: {
+    invertText: {
+      WebkitTextStroke: "1px black",
+      color: "white"
+    },
+    marker: {
+      cursor: "pointer"
+    },
+    checkedLabel: {
+      color: "white"
+    },
+    switch: {
       position: "absolute",
       bottom: theme.spacing(3),
       right: theme.spacing(1)
     },
-    checkedLabel: {
-      color: "white"
+    zoomControl: {
+      margin: theme.spacing(0, 1, 8, 0)
     }
   })
 );
 
 const LocalMap = ({ latitude, longitude, markers }: any) => {
   const classes = useStyles();
-  const [popup, setPopup]: any = React.useState({});
   const [isChecked, setIsChecked] = React.useState(false);
-  const [viewport, setViewport] = React.useState({
-    latitude,
-    longitude,
-    zoom: 12
+  const [zoom, setZoom] = React.useState(11);
+  const [center, setCenter]: any[] = React.useState([longitude, latitude]);
+  const [popup, setPopup]: any = React.useState({
+    open: false,
+    marker: {}
   });
 
   React.useEffect(() => {
-    setViewport({
-      zoom: 12,
-      latitude,
-      longitude
-    });
+    setCenter([longitude, latitude]);
+    setZoom(11);
   }, [latitude, longitude]);
+
+  const handleZoom = (mapConfig: any) => {
+    setZoom(mapConfig.getZoom());
+    setCenter(mapConfig.getCenter());
+  };
+
+  const handleMarkerClick = (marker: any) => {
+    setPopup({
+      open: true,
+      marker
+    });
+  };
+
+  const handlePopupClickAway = () => {
+    setPopup({
+      ...popup,
+      open: false
+    });
+  };
 
   const toggleMapStyle = () => {
     setIsChecked(prev => !prev);
   };
 
-  const _onViewportChange = (viewport: any) => setViewport(viewport);
-
-  const _renderPopup = () => {
-    const { lat, lng, category, name } = popup;
-    return (
-      !isEmpty(popup) && (
-        <LocalMapPopup
-          latitude={lat}
-          longitude={lng}
-          category={category}
-          name={name}
-          onClose={() => setPopup({})}
-        />
-      )
-    );
-  };
-
-  const handlePinClick = (marker: any) => {
-    setPopup(marker);
-  };
-
   return (
     <Card className={classes.card}>
       <CardContent>
-        <MapGl
-          scrollZoom={false}
-          mapStyle={
+        <Map
+          // eslint-disable-next-line
+          style={
             isChecked
-              ? "mapbox://styles/mapbox/satellite-v9"
+              ? "mapbox://styles/mapbox/satellite-streets-v9"
               : "mapbox://styles/mapbox/streets-v11"
           }
-          {...viewport}
-          height="500px"
-          width="100%"
-          onViewportChange={_onViewportChange}
-          mapboxApiAccessToken="pk.eyJ1IjoiamhtY2theTkzIiwiYSI6ImNqd29oc2hzdjF3YnM0Ym4wa3o4azFhd2MifQ.dqrE-W1cXNGKpV5FGPZFww"
+          onZoomEnd={handleZoom}
+          center={center}
+          zoom={[zoom]}
+          containerStyle={{
+            height: "400px",
+            width: "100%"
+          }}
         >
           {isEmpty(markers) ? (
-            <Marker latitude={latitude} longitude={longitude}>
-              <MapPin
-                onClick={() =>
-                  handlePinClick({
-                    lat: latitude,
-                    lng: longitude,
-                    category: "Put In",
-                    name: ""
-                  })
-                }
-              />
+            <Marker
+              className={classes.marker}
+              coordinates={[longitude, latitude]}
+              onClick={() =>
+                handleMarkerClick({
+                  lng: longitude,
+                  lat: latitude,
+                  category: "Put In"
+                })
+              }
+            >
+              <>
+                <MapPin />
+                <Typography
+                  variant="h6"
+                  noWrap
+                  className={clsx(classes.mapLabel, {
+                    [classes.invertText]: isChecked
+                  })}
+                >
+                  Put In
+                </Typography>
+              </>
             </Marker>
           ) : (
-            markers.map((marker: any) => (
+            markers.map((marker: any, index: number) => (
               <Marker
-                key={`local-map-marker-${marker.id}`}
-                latitude={marker.lat}
-                longitude={marker.lng}
+                className={classes.marker}
+                key={`local-map-marker-${index}`}
+                coordinates={[marker.lng, marker.lat]}
+                onClick={() => handleMarkerClick(marker)}
               >
-                <MapPin onClick={() => handlePinClick(marker)} />
+                <>
+                  <MapPin />
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    className={clsx(classes.mapLabel, {
+                      [classes.invertText]: isChecked
+                    })}
+                  >
+                    {marker.category}
+                  </Typography>
+                </>
               </Marker>
             ))
           )}
-          {_renderPopup()}
-          <div className={classes.navControl}>
-            <NavigationControl />
-          </div>
-          <div className={classes.styleControl}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={isChecked}
-                  onChange={toggleMapStyle}
-                  color="primary"
-                />
-              }
-              label={
-                <Typography className={clsx(isChecked && classes.checkedLabel)}>
-                  Satellite
-                </Typography>
-              }
-            />
-          </div>
-        </MapGl>
+          <ZoomControl
+            position="bottom-right"
+            className={classes.zoomControl}
+          />
+          <FormControlLabel
+            className={classes.switch}
+            control={
+              <Switch
+                checked={isChecked}
+                onChange={toggleMapStyle}
+                color="primary"
+              />
+            }
+            label={
+              <Typography className={clsx(isChecked && classes.checkedLabel)}>
+                Satellite
+              </Typography>
+            }
+          />
+          {popup.open && (
+            <Popup coordinates={[popup.marker.lng, popup.marker.lat]}>
+              <LocalMapPopup
+                latitude={popup.marker.lat}
+                longitude={popup.marker.lng}
+                category={popup.marker.category}
+                name={popup.marker.name}
+                closePopup={handlePopupClickAway}
+              />
+            </Popup>
+          )}
+        </Map>
       </CardContent>
     </Card>
   );

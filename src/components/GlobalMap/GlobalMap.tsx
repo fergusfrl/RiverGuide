@@ -78,8 +78,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
   const classes = useStyles();
-  // const [zoom, setZoom] = React.useState(5);
-  // const [center, setCenter]: any = React.useState([172.186, -40.5]);
   const [isChecked, setIsChecked] = React.useState(false);
   const [popup, setPopup]: any = React.useState({
     open: false,

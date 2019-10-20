@@ -1,56 +1,62 @@
 import React from "react";
-import { Popup } from "react-map-gl";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
 // Material UI Components
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+
+// Material UI Icons
+import DirectionsIcon from "@material-ui/icons/Directions";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    popup: {
+      minWidth: "250px"
+    },
+    latlng: {}
+  })
+);
 
 const LocalMapPopup = ({
   longitude,
   latitude,
   category,
+  description,
   name,
-  onClose
+  closePopup
 }: any) => {
+  const classes = useStyles();
+
   return (
-    <Popup
-      tipSize={5}
-      anchor="top"
-      longitude={longitude}
-      latitude={latitude}
-      onClose={onClose}
-    >
-      <>
-        <Typography color="primary" variant="subtitle1">
-          {category}
-        </Typography>
-        <Typography variant="h5">{name}</Typography>
-        <Grid container direction="column" spacing={1}>
+    <ClickAwayListener onClickAway={closePopup}>
+      <div className={classes.popup}>
+        <Grid container spacing={1} justify="space-between">
           <Grid item>
-            <Typography
-              paragraph
-              color="textSecondary"
-            >{`lat: ${latitude}`}</Typography>
+            <Grid container direction="column">
+              <Typography color="primary" variant="subtitle1">
+                {category}
+              </Typography>
+              <Grid item>{name}</Grid>
+              <Grid item>{description}</Grid>
+              <Grid item>{`${latitude}, ${longitude}`}</Grid>
+            </Grid>
           </Grid>
           <Grid item>
-            <Typography
-              paragraph
-              color="textSecondary"
-            >{`lon: ${longitude}`}</Typography>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="text"
-              href={`https://maps.google.com/?q=${latitude},${longitude}`}
-              target="_blank"
-            >
-              Google Maps
-            </Button>
+            <Tooltip title="Directions (Google Maps)">
+              <IconButton
+                href={`https://maps.google.com/?q=${latitude},${longitude}`}
+                target="_blank"
+              >
+                <DirectionsIcon />
+              </IconButton>
+            </Tooltip>
           </Grid>
         </Grid>
-      </>
-    </Popup>
+      </div>
+    </ClickAwayListener>
   );
 };
 

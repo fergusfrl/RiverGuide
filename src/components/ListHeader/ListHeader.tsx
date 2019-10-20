@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       alignItems: "center",
       [theme.breakpoints.down("xs")]: {
-        marginBottom: "0"
+        padding: "1px 2px",
+        margin: theme.spacing(1.5, 1, 0, 1)
       }
     },
     input: {
