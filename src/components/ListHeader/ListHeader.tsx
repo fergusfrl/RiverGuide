@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(8)
     },
     paper: {
-      margin: "1.5em 1em 1.5em 1em",
+      margin: "1.5em 1em",
       padding: "2px 4px",
       display: "flex",
       alignItems: "center",
