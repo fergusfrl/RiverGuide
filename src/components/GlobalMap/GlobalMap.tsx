@@ -58,6 +58,13 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: "bold",
       WebkitTextStroke: "1px white"
     },
+    mapGradeLabel: {
+      position: "absolute",
+      margin: "-10px 0 0 25px",
+      maxWidth: 300,
+      fontWeight: "bold",
+      WebkitTextStroke: "1px white"
+    },
     switch: {
       position: "absolute",
       bottom: theme.spacing(3),
@@ -115,7 +122,7 @@ const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
       onClick={() => handleMarkerClick(river)}
     >
       <>
-        <MapPin />
+        <MapPin grade={river.key_facts_char.grade_overall} />
         <Typography
           noWrap
           className={clsx(classes.mapSectionName, {
@@ -124,6 +131,12 @@ const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
         >
           {river.section_name}
         </Typography>
+        <Typography
+          noWrap
+          className={clsx(classes.mapGradeLabel, {
+            [classes.invertText]: isChecked
+          })}
+        >{`Class ${river.key_facts_char.grade_overall}`}</Typography>
       </>
     </Marker>
   );

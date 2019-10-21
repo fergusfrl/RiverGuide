@@ -31,7 +31,12 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1, 1, 0, 0)
     },
     divider: {
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(2),
+      position: "sticky",
+      top: "163px",
+      [theme.breakpoints.down("xs")]: {
+        top: "91px"
+      }
     }
   })
 );
