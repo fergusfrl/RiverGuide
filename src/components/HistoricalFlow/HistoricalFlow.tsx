@@ -25,7 +25,8 @@ const HistoricalFlow = ({ historicalFlow }: any) => {
       timeUnit: "hour",
       count: 1
     };
-    dateAxis.tooltipDateFormat = "h:mma, dd MMMM";
+    dateAxis.tooltipDateFormat = "h:mma, EEEE dd MMMM";
+    dateAxis.dateFormats.setKey("day", "EEE");
     dateAxis.renderer.grid.template.location = 0;
 
     let valueAxis: any = chart.yAxes.push(new ValueAxis());
@@ -35,6 +36,7 @@ const HistoricalFlow = ({ historicalFlow }: any) => {
     let series = chart.series.push(new LineSeries());
     series.dataFields.dateX = "date";
     series.dataFields.valueY = "value";
+    series.strokeWidth = 2;
 
     series.tooltipText = "{valueY.value} cumecs";
     chart.cursor = new XYCursor();
