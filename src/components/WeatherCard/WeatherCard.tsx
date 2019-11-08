@@ -126,7 +126,7 @@ const WeatherCard = ({
       <Divider />
       <CardActions>
         <Button size="small" color="primary" onClick={toggleExpand}>
-          {expand ? "Collapse" : "Expand"}
+          {expand ? "Collapse" : "Forcast"}
         </Button>
       </CardActions>
     </Card>

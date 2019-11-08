@@ -14,12 +14,12 @@ import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-// import Divider from "@material-ui/core/Divider";
+import Divider from "@material-ui/core/Divider";
 
 // Material UI Icons
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
-// import FilterIcon from "@material-ui/icons/FilterList";
+import FilterIcon from "@material-ui/icons/FilterList";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,7 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ListHeader = ({ searchRivers, openFilter, setMapView }: any) => {
+const ListHeader = ({
+  searchRivers,
+  openFilter,
+  setMapView,
+  filtersApplied
+}: any) => {
   const classes = useStyles();
   const [searchValue, setSearchValue] = React.useState("");
   const [tabValue, setTabValue] = React.useState(0);
@@ -95,14 +100,15 @@ const ListHeader = ({ searchRivers, openFilter, setMapView }: any) => {
         >
           {searchValue ? <CloseIcon /> : <SearchIcon />}
         </IconButton>
-        {/* <Divider className={classes.divider} orientation="vertical" />
+        <Divider className={classes.divider} orientation="vertical" />
         <IconButton
+          color={filtersApplied ? "primary" : "default"}
           className={classes.iconButton}
           aria-label="directions"
           onClick={openFilter}
         >
           <FilterIcon />
-        </IconButton> */}
+        </IconButton>
       </Paper>
       {matches && (
         <Tabs
@@ -120,7 +126,11 @@ const ListHeader = ({ searchRivers, openFilter, setMapView }: any) => {
   );
 };
 
+const mapStateToProps = (state: any) => ({
+  filtersApplied: state.filters.grade.activeValues.length > 0
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { searchRivers }
 )(ListHeader);

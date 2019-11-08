@@ -120,13 +120,13 @@ const mapStateToProps = (state: any) => ({
     filterAndSearchRivers(
       state.rivers.rivers,
       state.rivers.searchStr,
-      state.rivers.filters
+      state.filters
     ).map((river: any) => river.region)
   ).sort(),
   rivers: filterAndSearchRivers(
     state.rivers.rivers,
     state.rivers.searchStr,
-    state.rivers.filters
+    state.filters
   ),
   isLoading: state.rivers.loading,
   hasError: state.rivers.error

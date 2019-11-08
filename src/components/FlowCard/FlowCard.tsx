@@ -75,7 +75,7 @@ const FlowCard = ({
         <Divider />
         <CardActions>
           <Button size="small" color="primary" onClick={toggleExpand}>
-            {expand ? "Collapse" : "Expand"}
+            {expand ? "Collapse" : "Flow Graph"}
           </Button>
         </CardActions>
       </>

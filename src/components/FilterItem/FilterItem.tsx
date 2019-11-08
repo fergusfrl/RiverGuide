@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 // Material UI Components
 import FormControl from "@material-ui/core/FormControl";
@@ -11,7 +11,7 @@ import Grid from "@material-ui/core/Grid";
 // Material UI Icons
 import TickIcon from "@material-ui/icons/Check";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     filter: {
       margin: "1em"
@@ -29,28 +29,37 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const FilterChip = ({ value }: any) => {
-  const [isSelected, setIsSelected] = React.useState(false);
+const FilterChip = ({ display, value, isSelected, toggleItem }: any) => {
   const classes = useStyles();
 
-  function toggleSelected() {
-    setIsSelected(prev => !prev);
+  function handleClick(value: number) {
+    toggleItem(value);
   }
 
   return isSelected ? (
     <Chip
       icon={<TickIcon />}
-      label={value}
+      label={display}
       className={classes.chip}
-      onClick={toggleSelected}
+      onClick={() => handleClick(value)}
       color="primary"
     />
   ) : (
-    <Chip label={value} className={classes.chip} onClick={toggleSelected} />
+    <Chip
+      label={display}
+      className={classes.chip}
+      onClick={() => handleClick(value)}
+    />
   );
 };
 
-const FilterItem = ({ name, values }: any) => {
+const FilterItem = ({
+  name,
+  values,
+  activeValues,
+  clearFilters,
+  toggleItem
+}: any) => {
   const classes = useStyles();
   return (
     <FormControl className={classes.filter}>
@@ -58,14 +67,24 @@ const FilterItem = ({ name, values }: any) => {
         <Grid item>
           <FormLabel>{name}</FormLabel>
         </Grid>
-        <Grid item></Grid>
       </Grid>
 
       <div className={classes.chipContainer}>
-        {values.map((value: string, index: number) => (
-          <FilterChip key={`filter-chip-${index}`} value={`Class ${value}`} />
+        {values.map((value: any, index: number) => (
+          <FilterChip
+            key={`filter-chip-${name}-${index}`}
+            display={value.display}
+            value={value.value}
+            isSelected={activeValues.includes(value.value)}
+            toggleItem={toggleItem}
+          />
         ))}
-        <Button className={classes.clearButton} size="small" color="primary">
+        <Button
+          className={classes.clearButton}
+          onClick={() => clearFilters(name)}
+          size="small"
+          color="primary"
+        >
           Clear
         </Button>
       </div>

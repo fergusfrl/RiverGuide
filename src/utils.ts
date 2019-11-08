@@ -1,6 +1,4 @@
-import isEmpty from "lodash/isEmpty";
 import size from "lodash/size";
-import keys from "lodash/keys";
 import isObject from "lodash/isObject";
 import isArray from "lodash/isArray";
 
@@ -12,21 +10,15 @@ export const applySearchValues = (searchStr: string) => (river: any) =>
   river.section_name.toLowerCase().includes(searchStr);
 
 export const applyFilterValues = (filters: any) => (river: any) => {
-  // this code works but is admittedly unreadable
-  if (size(filters) === 0) return true;
-  if (size(filters) > size(river.key_facts_char)) return false;
+  if (size(filters.grade.activeValues) === 0) return true;
 
-  return !isEmpty(
-    keys(river.key_facts_char)
-      .map((attr: any) => ({
-        name: attr,
-        value: river.key_facts_char[attr]
-      }))
-      .map(
-        (fil: any) => filters[fil.name] && filters[fil.name].includes(fil.value)
-      )
-      .filter((val: boolean) => val)
-  );
+  const grade = river && river.key_facts_char.grade_overall;
+
+  for (var index in filters.grade.activeValues) {
+    if (grade && grade.includes(filters.grade.activeValues[index])) return true;
+  }
+
+  return false;
 };
 
 export const mapAttributes = () => (value: any, key: string) => ({

@@ -15,7 +15,9 @@ import {
 export const getRiverList = () => (dispatch: ThunkDispatch<{}, {}, any>) => {
   dispatch({ type: LOADING });
   axios
-    .get("https://api.riverguide.co.nz/guides?_limit=999")
+    .get("https://api.riverguide.co.nz/guides?_limit=999", {
+      headers: { "Content-Type": "application/json" }
+    })
     .then(res => dispatch({ type: SET_ALL_RIVERS, payload: res.data }))
     .catch(err => {
       dispatch({ type: ERROR });

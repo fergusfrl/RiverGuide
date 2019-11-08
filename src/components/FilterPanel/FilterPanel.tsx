@@ -1,7 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import uniq from "lodash/uniq";
+
+// Actions
+import { clearAllFilters, clearFilters, toggleItem } from "./actions";
 
 // Components
 import { FilterItem } from "../FilterItem";
@@ -22,7 +24,7 @@ import CloseIcon from "@material-ui/icons/Close";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     subdrawerpaper: {
-      width: drawerWidth - 1,
+      width: drawerWidth,
       paddingBottom: "2em",
       height: "100%",
       paddingTop: theme.spacing(8),
@@ -55,8 +57,10 @@ const useStyles = makeStyles((theme: Theme) =>
 const FilterPanel = ({
   open,
   closeFilter,
-  filterValues,
-  clearFilters
+  clearAllFilters,
+  clearFilters,
+  toggleItem,
+  grade
 }: any) => {
   const classes = useStyles();
 
@@ -81,50 +85,48 @@ const FilterPanel = ({
           </IconButton>
         </Grid>
       </Grid>
-      {Object.keys(filterValues).map((key: any, index: Number) => (
-        <FilterItem
-          key={`filter-item-${index}`}
-          name={key}
-          values={filterValues[key]}
-        />
-      ))}
+      <FilterItem
+        name="Grade"
+        values={grade.availableValues}
+        activeValues={grade.activeValues}
+        clearFilters={clearFilters}
+        toggleItem={toggleItem}
+      />
       <Grid container justify="flex-end" className={classes.buttons}>
         <Grid item>
-          <Button onClick={closeFilter} className={classes.filterButton}>
-            Cancel
+          <Button
+            color="primary"
+            onClick={clearAllFilters}
+            className={classes.filterButton}
+          >
+            Reset All
           </Button>
         </Grid>
         <Grid item>
+          <Button onClick={closeFilter} className={classes.filterButton}>
+            Close
+          </Button>
+        </Grid>
+        {/* <Grid item>
           <Button
             onClick={closeFilter}
             className={classes.filterButton}
             variant="contained"
             color="primary"
           >
-            Apply
+            Clear All
           </Button>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Drawer>
   );
 };
 
 const mapStateToProps = (state: any) => ({
-  filterValues: state.rivers.rivers
-    .map((river: any) => river.key_facts_char)
-    .reduce((acc: any, curr: any) => {
-      Object.keys(curr).forEach((key: string) => {
-        if (key in acc) {
-          acc[key] = uniq([...acc[key], curr[key]]);
-        } else {
-          acc[key] = [curr[key]];
-        }
-      });
-      return acc;
-    }, {})
+  grade: state.filters.grade
 });
 
 export default connect(
   mapStateToProps,
-  {}
+  { clearAllFilters, clearFilters, toggleItem }
 )(FilterPanel);
