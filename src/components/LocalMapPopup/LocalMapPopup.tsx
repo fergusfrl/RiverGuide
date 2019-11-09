@@ -46,7 +46,7 @@ const LocalMapPopup = ({
           <Grid item>
             <Tooltip title="Directions (Google Maps)">
               <IconButton
-                href={`https://maps.google.com/?q=${latitude},${longitude}`}
+                href={`https://www.google.com/maps?saddr=My+Location&daddr=${latitude},${longitude}`}
                 target="_blank"
               >
                 <DirectionsIcon />
