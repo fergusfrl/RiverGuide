@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import debounce from "lodash/debounce";
+import keys from "lodash/keys";
+import isEmpty from "lodash/isEmpty";
 
 // Actions
 import { searchRivers } from "./actions";
@@ -56,7 +58,7 @@ const ListHeader = ({
   searchRivers,
   openFilter,
   setMapView,
-  filtersApplied
+  emptyFilters
 }: any) => {
   const classes = useStyles();
   const [searchValue, setSearchValue] = React.useState("");
@@ -102,7 +104,7 @@ const ListHeader = ({
         </IconButton>
         <Divider className={classes.divider} orientation="vertical" />
         <IconButton
-          color={filtersApplied ? "primary" : "default"}
+          color={emptyFilters ? "default" : "primary"}
           className={classes.iconButton}
           aria-label="directions"
           onClick={openFilter}
@@ -127,7 +129,9 @@ const ListHeader = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  filtersApplied: state.filters.grade.activeValues.length > 0
+  emptyFilters: keys(state.filters).every((filterKey: string) =>
+    isEmpty(state.filters[filterKey].activeValues)
+  )
 });
 
 export default connect(

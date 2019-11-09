@@ -10,6 +10,14 @@ const initialState = {
       { display: "Class 5", value: 5 }
     ],
     activeValues: []
+  },
+  runTime: {
+    availableValues: [
+      { display: "Half Day", value: { min: 0, max: 5 } },
+      { display: "Full Day", value: { min: 6, max: 11 } },
+      { display: "Multiday Day", value: { min: 12, max: 999 } }
+    ],
+    activeValues: []
   }
 };
 

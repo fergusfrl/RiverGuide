@@ -29,11 +29,17 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const FilterChip = ({ display, value, isSelected, toggleItem }: any) => {
+const FilterChip = ({
+  attribute,
+  display,
+  value,
+  isSelected,
+  toggleItem
+}: any) => {
   const classes = useStyles();
 
   function handleClick(value: number) {
-    toggleItem(value);
+    toggleItem(attribute, value);
   }
 
   return isSelected ? (
@@ -55,6 +61,7 @@ const FilterChip = ({ display, value, isSelected, toggleItem }: any) => {
 
 const FilterItem = ({
   name,
+  attribute,
   values,
   activeValues,
   clearFilters,
@@ -77,11 +84,12 @@ const FilterItem = ({
             value={value.value}
             isSelected={activeValues.includes(value.value)}
             toggleItem={toggleItem}
+            attribute={attribute}
           />
         ))}
         <Button
           className={classes.clearButton}
-          onClick={() => clearFilters(name)}
+          onClick={() => clearFilters(attribute)}
           size="small"
           color="primary"
         >

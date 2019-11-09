@@ -60,7 +60,8 @@ const FilterPanel = ({
   clearAllFilters,
   clearFilters,
   toggleItem,
-  grade
+  grade,
+  runTime
 }: any) => {
   const classes = useStyles();
 
@@ -87,8 +88,17 @@ const FilterPanel = ({
       </Grid>
       <FilterItem
         name="Grade"
+        attribute="grade"
         values={grade.availableValues}
         activeValues={grade.activeValues}
+        clearFilters={clearFilters}
+        toggleItem={toggleItem}
+      />
+      <FilterItem
+        name="Run Time"
+        attribute="runTime"
+        values={runTime.availableValues}
+        activeValues={runTime.activeValues}
         clearFilters={clearFilters}
         toggleItem={toggleItem}
       />
@@ -107,23 +117,14 @@ const FilterPanel = ({
             Close
           </Button>
         </Grid>
-        {/* <Grid item>
-          <Button
-            onClick={closeFilter}
-            className={classes.filterButton}
-            variant="contained"
-            color="primary"
-          >
-            Clear All
-          </Button>
-        </Grid> */}
       </Grid>
     </Drawer>
   );
 };
 
 const mapStateToProps = (state: any) => ({
-  grade: state.filters.grade
+  grade: state.filters.grade,
+  runTime: state.filters.runTime
 });
 
 export default connect(

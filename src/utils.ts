@@ -1,4 +1,4 @@
-import size from "lodash/size";
+import isEmpty from "lodash/isEmpty";
 import isObject from "lodash/isObject";
 import isArray from "lodash/isArray";
 
@@ -9,13 +9,31 @@ export const applySearchValues = (searchStr: string) => (river: any) =>
   river.river_name.toLowerCase().includes(searchStr) ||
   river.section_name.toLowerCase().includes(searchStr);
 
-export const applyFilterValues = (filters: any) => (river: any) => {
-  if (size(filters.grade.activeValues) === 0) return true;
+export const applyGradeFilter = (grade: any) => (river: any) => {
+  if (isEmpty(grade.activeValues)) return true;
 
-  const grade = river && river.key_facts_char.grade_overall;
+  const gradeOverall = river && river.key_facts_char.grade_overall;
 
-  for (var index in filters.grade.activeValues) {
-    if (grade && grade.includes(filters.grade.activeValues[index])) return true;
+  for (var value of grade.activeValues) {
+    if (gradeOverall && gradeOverall.includes(value)) return true;
+  }
+
+  return false;
+};
+
+export const applyRunTimeFilter = (runTime: any) => (river: any) => {
+  if (isEmpty(runTime.activeValues)) return true;
+
+  const time = river && river.key_facts_num.time;
+
+  for (var val of runTime.activeValues) {
+    if (time && time.unit === "hours") {
+      const matchesLowerBound =
+        !isNaN(time.value[0]) && time.value[0] >= val.min;
+      const matchesUpperBound =
+        !isNaN(time.value[1]) && time.value[1] <= val.max;
+      if (matchesLowerBound && matchesUpperBound) return true;
+    }
   }
 
   return false;

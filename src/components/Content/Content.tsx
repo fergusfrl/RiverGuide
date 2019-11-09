@@ -4,7 +4,11 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 
 // Utils
-import { applySearchValues, applyFilterValues } from "../../utils";
+import {
+  applySearchValues,
+  applyGradeFilter,
+  applyRunTimeFilter
+} from "../../utils";
 
 // Constants
 import { drawerWidth } from "../../constants";
@@ -76,7 +80,8 @@ const mapStateToProps = (state: any) => ({
   detailsOpen: state.details.isSelected,
   rivers: state.rivers.rivers
     .filter(applySearchValues(state.rivers.searchStr))
-    .filter(applyFilterValues(state.filters))
+    .filter(applyGradeFilter(state.filters.grade))
+    .filter(applyRunTimeFilter(state.filters.runTime))
 });
 
 export default connect(
