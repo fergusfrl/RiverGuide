@@ -10,7 +10,7 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 
 // Actions
-import { setCenter, setZoom } from "./actions";
+import { setCenter, setZoom, setLayer, setPitch } from "./actions";
 
 // Components
 import { MapPin } from "../MapPin";
@@ -83,9 +83,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
+const GlobalMap = ({
+  rivers,
+  zoom,
+  center,
+  layer,
+  pitch,
+  setZoom,
+  setCenter,
+  setLayer,
+  setPitch
+}: any) => {
   const classes = useStyles();
-  const [isChecked, setIsChecked] = React.useState(false);
   const [popup, setPopup]: any = React.useState({
     open: false,
     river: {}
@@ -111,7 +120,11 @@ const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
   };
 
   const toggleMapStyle = () => {
-    setIsChecked(prev => !prev);
+    setLayer(!layer);
+  };
+
+  const handlePitch = (mapConfig: any) => {
+    setPitch(mapConfig.getPitch());
   };
 
   const marker = (river: any, index: number) => (
@@ -126,7 +139,7 @@ const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
         <Typography
           noWrap
           className={clsx(classes.mapSectionName, {
-            [classes.invertText]: isChecked
+            [classes.invertText]: layer
           })}
         >
           {river.section_name}
@@ -134,7 +147,7 @@ const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
         <Typography
           noWrap
           className={clsx(classes.mapGradeLabel, {
-            [classes.invertText]: isChecked
+            [classes.invertText]: layer
           })}
         >{`Class ${river.key_facts_char.grade_overall}`}</Typography>
       </>
@@ -159,14 +172,16 @@ const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
     <Map
       // eslint-disable-next-line
       style={
-        isChecked
+        layer
           ? "mapbox://styles/mapbox/satellite-streets-v9"
           : "mapbox://styles/mapbox/streets-v11"
       }
       className={classes.map}
       center={center}
       zoom={[zoom]}
+      pitch={[pitch]}
       onZoomEnd={handleZoom}
+      onPitchEnd={handlePitch}
       containerStyle={{
         height: "100vh",
         width: "100%"
@@ -188,14 +203,10 @@ const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
       <FormControlLabel
         className={classes.switch}
         control={
-          <Switch
-            checked={isChecked}
-            onChange={toggleMapStyle}
-            color="primary"
-          />
+          <Switch checked={layer} onChange={toggleMapStyle} color="primary" />
         }
         label={
-          <Typography className={clsx(isChecked && classes.checkedLabel)}>
+          <Typography className={clsx(layer && classes.checkedLabel)}>
             Satellite
           </Typography>
         }
@@ -211,10 +222,12 @@ const GlobalMap = ({ rivers, zoom, center, setZoom, setCenter }: any) => {
 
 const mapStateToProps = (state: any) => ({
   zoom: state.map.zoom,
-  center: state.map.center
+  center: state.map.center,
+  layer: state.map.layer,
+  pitch: state.map.pitch
 });
 
 export default connect(
   mapStateToProps,
-  { setZoom, setCenter }
+  { setZoom, setCenter, setLayer, setPitch }
 )(GlobalMap);
