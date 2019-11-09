@@ -1,6 +1,4 @@
 import isEmpty from "lodash/isEmpty";
-import size from "lodash/size";
-import keys from "lodash/keys";
 import isObject from "lodash/isObject";
 import isArray from "lodash/isArray";
 
@@ -11,22 +9,34 @@ export const applySearchValues = (searchStr: string) => (river: any) =>
   river.river_name.toLowerCase().includes(searchStr) ||
   river.section_name.toLowerCase().includes(searchStr);
 
-export const applyFilterValues = (filters: any) => (river: any) => {
-  // this code works but is admittedly unreadable
-  if (size(filters) === 0) return true;
-  if (size(filters) > size(river.key_facts_char)) return false;
+export const applyGradeFilter = (grade: any) => (river: any) => {
+  if (isEmpty(grade.activeValues)) return true;
 
-  return !isEmpty(
-    keys(river.key_facts_char)
-      .map((attr: any) => ({
-        name: attr,
-        value: river.key_facts_char[attr]
-      }))
-      .map(
-        (fil: any) => filters[fil.name] && filters[fil.name].includes(fil.value)
-      )
-      .filter((val: boolean) => val)
-  );
+  const gradeOverall = river && river.key_facts_char.grade_overall;
+
+  for (var value of grade.activeValues) {
+    if (gradeOverall && gradeOverall.includes(value)) return true;
+  }
+
+  return false;
+};
+
+export const applyRunTimeFilter = (runTime: any) => (river: any) => {
+  if (isEmpty(runTime.activeValues)) return true;
+
+  const time = river && river.key_facts_num.time;
+
+  for (var val of runTime.activeValues) {
+    if (time && time.unit === "hours") {
+      const matchesLowerBound =
+        !isNaN(time.value[0]) && time.value[0] >= val.min;
+      const matchesUpperBound =
+        !isNaN(time.value[1]) && time.value[1] <= val.max;
+      if (matchesLowerBound && matchesUpperBound) return true;
+    }
+  }
+
+  return false;
 };
 
 export const mapAttributes = () => (value: any, key: string) => ({

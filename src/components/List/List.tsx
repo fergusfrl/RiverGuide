@@ -4,7 +4,11 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import uniq from "lodash/uniq";
 
 // Utils
-import { applySearchValues, applyFilterValues } from "../../utils";
+import {
+  applySearchValues,
+  applyGradeFilter,
+  applyRunTimeFilter
+} from "../../utils";
 
 // Actions
 import { getRiverList, getTelemetryData } from "./actions";
@@ -113,20 +117,21 @@ const List = ({
 const filterAndSearchRivers = (rivers: any, searchStr: string, filters: any) =>
   rivers
     .filter(applySearchValues(searchStr))
-    .filter(applyFilterValues(filters));
+    .filter(applyGradeFilter(filters.grade))
+    .filter(applyRunTimeFilter(filters.runTime));
 
 const mapStateToProps = (state: any) => ({
   regions: uniq(
     filterAndSearchRivers(
       state.rivers.rivers,
       state.rivers.searchStr,
-      state.rivers.filters
+      state.filters
     ).map((river: any) => river.region)
   ).sort(),
   rivers: filterAndSearchRivers(
     state.rivers.rivers,
     state.rivers.searchStr,
-    state.rivers.filters
+    state.filters
   ),
   isLoading: state.rivers.loading,
   hasError: state.rivers.error

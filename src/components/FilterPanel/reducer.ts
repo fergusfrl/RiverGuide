@@ -1,40 +1,63 @@
-import {
-  SET_FILTER_VALUES,
-  CLEAR_VALUES,
-  CLEAR_ALL_VALUES
-} from "./actionTypes";
+import { FILTER_RIVERS, CLEAR_VALUES, CLEAR_ALL_FILTERS } from "./actionTypes";
 
 const initialState = {
   grade: {
-    values: [1, 2, 3, 4, 5, "5+"],
+    availableValues: [
+      { display: "Class 1", value: 1 },
+      { display: "Class 2", value: 2 },
+      { display: "Class 3", value: 3 },
+      { display: "Class 4", value: 4 },
+      { display: "Class 5", value: 5 }
+    ],
+    activeValues: []
+  },
+  runTime: {
+    availableValues: [
+      { display: "Half Day", value: { min: 0, max: 5 } },
+      { display: "Full Day", value: { min: 6, max: 11 } },
+      { display: "Multiday Day", value: { min: 12, max: 999 } }
+    ],
     activeValues: []
   }
 };
 
-const activateValues = (state: any, action: any) => ({
-  ...state,
-  [action.payload.attribute]: {
-    ...state[action.payload.attribute],
-    activeValues: action.payload.values
-  }
-});
+const toggleValues = (state: any, action: any) => {
+  const attr = action.payload.attribute;
+  const payloadValue = action.payload.value;
+  const activeValues = state[attr].activeValues;
 
-const clearValues = (state: any, action: any) => ({
-  ...state,
-  [action.payload]: {
-    ...[state[action.payload]],
-    activeValues: []
-  }
-});
+  const val = activeValues.includes(payloadValue)
+    ? activeValues.filter((v: number) => v !== payloadValue)
+    : [payloadValue, ...activeValues];
+
+  return {
+    ...state,
+    [attr]: {
+      ...state[attr],
+      activeValues: val
+    }
+  };
+};
+
+const clearValues = (state: any, action: any) => {
+  const attr = action.payload;
+  return {
+    ...state,
+    [attr]: {
+      ...state[attr],
+      activeValues: []
+    }
+  };
+};
 
 const clearAllValues = () => ({
   ...initialState
 });
 
 const actionMap: { [key: string]: any } = {
-  [SET_FILTER_VALUES]: activateValues,
+  [FILTER_RIVERS]: toggleValues,
   [CLEAR_VALUES]: clearValues,
-  [CLEAR_ALL_VALUES]: clearAllValues
+  [CLEAR_ALL_FILTERS]: clearAllValues
 };
 
 export default function(state = initialState, action: any) {

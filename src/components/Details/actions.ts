@@ -28,11 +28,11 @@ export const clearDetails = () => (dispatch: ThunkDispatch<{}, {}, any>) => {
   dispatch({ type: CLEAR_DETAILS });
 };
 
-export const getHistoricalRiverData = (gauge_id: string) => (
+export const getHistoricalRiverData = (gauge_id: string) => async (
   dispatch: ThunkDispatch<{}, {}, any>
 ) => {
   dispatch({ type: FLOW_LOADING });
-  axios
+  await axios
     .post("https://www.openriverdata.com/", {
       action: "get_flows",
       crossDomain: true,
@@ -42,7 +42,7 @@ export const getHistoricalRiverData = (gauge_id: string) => (
       dispatch({
         type: SET_HISTORICAL_FLOW,
         payload: {
-          flows: res.data.flows.slice(1, 2000),
+          flows: res.data.flows.slice(1, 1000),
           last_updated: res.data.last_updated
         }
       });
@@ -56,13 +56,13 @@ export const getHistoricalRiverData = (gauge_id: string) => (
     });
 };
 
-export const getWeatherData = (lat: any, lon: any) => (
+export const getWeatherData = (lat: any, lon: any) => async (
   dispatch: ThunkDispatch<{}, {}, any>
 ) => {
   dispatch({ type: WEATHER_LOADING });
 
   // Get current weather
-  axios
+  await axios
     .get(
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&lang=en&mode=json&APPID=521cea2fce8675d0fe0678216dc01d5c`
     )
@@ -90,7 +90,7 @@ export const getWeatherData = (lat: any, lon: any) => (
     });
 
   // Get forcast weather
-  axios
+  await axios
     .get(
       `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/52f217f1efd90551483180fc9203dc56/${lat},${lon}`
     )
@@ -108,7 +108,7 @@ export const getWeatherData = (lat: any, lon: any) => (
       });
     })
     .catch(err => {
-      console.log("Something went wrong loading weather forcast", err);
+      console.log("Error loading weather forcast", err);
     })
     .finally(() => {});
 };
