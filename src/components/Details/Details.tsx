@@ -49,15 +49,13 @@ const Details = ({
 }: any) => {
   const classes = useStyles();
 
-  const getRiverData = async () => await getHistoricalRiverData(river.gauge_id);
   const getForcast = async () =>
     await getWeatherData(river.latitude, river.longitude);
 
   React.useEffect(() => {
-    if (river.gauge_id) getRiverData();
     if (river.latitude && river.longitude) getForcast();
     // eslint-disable-next-line
-  }, [river.gauge_id, river.latitude, river.longitude]);
+  }, [river.latitude, river.longitude]);
 
   const currentGauge =
     river.gauge_id &&
@@ -87,6 +85,8 @@ const Details = ({
           name={currentGauge.name}
           source={currentGauge.data_source}
           lastUpdated={moment(currentGauge.last_updated).format("ddd, h:MMa")}
+          getHistoricalRiverData={getHistoricalRiverData}
+          gauge_id={currentGauge.id}
         />
       )}
       {river.latitude && river.longitude && (

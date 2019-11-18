@@ -31,13 +31,29 @@ const FlowCard = ({
   name,
   source,
   lastUpdated,
-  isLoading
+  isLoading,
+  getHistoricalRiverData,
+  gauge_id
 }: any) => {
   const classes = useStyles();
   const [expand, setExpand] = React.useState(false);
+  const [firstOpen, setFirstOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (expand) {
+      getHistoricalRiverData(gauge_id);
+    } else {
+      setFirstOpen(false);
+    }
+    // eslint-disable-next-line
+  }, [gauge_id]);
 
   function toggleExpand() {
     setExpand(prev => !prev);
+    if (!firstOpen) {
+      getHistoricalRiverData(gauge_id);
+      setFirstOpen(true);
+    }
   }
 
   function renderContent() {
